@@ -1,77 +1,74 @@
 package com.example.appclubdeportivo
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
 @Composable
 fun MainMenuScreen(navController: NavController) {
     AppClubDeportivoTheme {
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp)
-                .background(MaterialTheme.colorScheme.background),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+                .background(MaterialTheme.colorScheme.background)
         ) {
-            Text(
-                text = "Menú Principal",
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            Column {
+                Header(title = "Menú Principal", showBackButton = false)
+                Spacer(modifier = Modifier.height(24.dp))
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top // Cambiado de Center a Top
+                ) {
+                    Button(
+                        onClick = { navController.navigate("abm_cliente_lista") },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("ABM Cliente")
+                    }
 
-            Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = { navController.navigate("abm_cliente_lista") },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("ABM Cliente")
-            }
+                    Button(
+                        onClick = { navController.navigate("abm_empleado_lista") },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("ABM Empleado")
+                    }
 
-            Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = { navController.navigate("abm_empleado_lista") },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("ABM Empleado")
-            }
+                    Button(
+                        onClick = { navController.navigate("registrar_pago") },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Registrar Pago")
+                    }
 
-            Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = { navController.navigate("registrar_pago") },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Registrar Pago")
-            }
+                    Button(
+                        onClick = { navController.navigate("reportes") },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Reportes")
+                    }
 
-            Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
-            Button(
-                onClick = { navController.navigate("reportes") },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Reportes")
-            }
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Button(
-                onClick = { /* Acción de cerrar sesión */ },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text("Cerrar Sesión")
+                    Button(
+                        onClick = { /* Acción de cerrar sesión */ },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Cerrar Sesión")
+                    }
+                }
             }
         }
     }
