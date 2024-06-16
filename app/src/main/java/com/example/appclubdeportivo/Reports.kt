@@ -30,7 +30,7 @@ fun ReportsScreen(navController: NavController) {
                     verticalArrangement = Arrangement.Top
                 ) {
                     Button(
-                        onClick = { navController.navigate("expired_list") },
+                        onClick = { navController.navigate("expiration_report") },
                         contentPadding = PaddingValues(vertical = 20.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -40,7 +40,7 @@ fun ReportsScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { navController.navigate("customer_list") },
+                        onClick = { navController.navigate("customer_report") },
                         contentPadding = PaddingValues(vertical = 20.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -50,7 +50,7 @@ fun ReportsScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { navController.navigate("employee_list") },
+                        onClick = { navController.navigate("employee_report") },
                         contentPadding = PaddingValues(vertical = 20.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
@@ -60,7 +60,7 @@ fun ReportsScreen(navController: NavController) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { navController.navigate("activities_lis") },
+                        onClick = { navController.navigate("activity_report") },
                         contentPadding = PaddingValues(vertical = 20.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {

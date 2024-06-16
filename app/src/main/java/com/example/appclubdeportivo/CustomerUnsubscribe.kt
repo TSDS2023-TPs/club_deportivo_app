@@ -16,8 +16,8 @@ import com.example.appclubdeportivo.ui.theme.SelectableButton
 fun CustomerUnsubscribeScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
     var selectedButton by remember { mutableStateOf("Baja") }
-    var customers by remember { mutableStateOf(listOf(Customer("1234", "Pepe Pepito", "10-04-2024", "$4500"),
-        Customer("1235", "Pepe Pepin", "31-12-2024", "$1200"))
+    var customers by remember { mutableStateOf(listOf(Customer("1", "Pepito", activities = listOf(Activity(1, "Natación")), expiredDate = "2024-12-31", amount= "2000"),
+        Customer("2", "Pepe", activities = listOf(Activity(1, "Funcional")), expiredDate = "2024-02-21", amount= "4000"))
     )}
     var selectedCustomers by remember { mutableStateOf(setOf<String>()) }
 

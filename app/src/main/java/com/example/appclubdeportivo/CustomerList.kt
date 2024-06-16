@@ -67,8 +67,8 @@ fun CustomerListScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    val exampleCustomers = listOf(Customer("1234", "Pepe Pepito", "10-04-2024", "$4500"),
-                        Customer("1235", "Pepe Pepin", "31-12-2024", "$1200"))
+                    val exampleCustomers = listOf(Customer("1234", "Pepe Pepito", expiredDate = "10-04-2024", amount= "$4500"),
+                        Customer("1235", "Pepe Pepin", expiredDate ="31-12-2024", amount="$1200"))
 
                     val currentDate = Calendar.getInstance().time
                     val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
@@ -86,7 +86,7 @@ fun CustomerListScreen(navController: NavController) {
                             field1 = PersonalizedText(customer.id),
                             field2 = PersonalizedText(customer.name),
                             field3 = PersonalizedText(customer.expiredDate, backgroundColor = backgroundColor),
-                            field4 = PersonalizedText(customer.rate, backgroundColor = Color.White),
+                            field4 = PersonalizedText(customer.amount, backgroundColor = Color.White),
                             field5 = PersonalizedText("Vencimiento Cuota"),
                             field6 = PersonalizedText("Monto"),
                             onEditClick = { /* a implementar */ }

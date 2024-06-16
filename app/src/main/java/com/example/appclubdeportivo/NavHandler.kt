@@ -21,7 +21,10 @@ fun NavHandler(navController: NavHostController) {
         composable("employee_unsubscribe") { EmployeeUnsubscribeScreen(navController = navController) }
         composable("payment") { PaymentRegisterScreen(navController = navController) }
         composable("reports") { ReportsScreen(navController = navController) }
-
+        composable("expiration_report") { ExpirationReportScreen(navController = navController) }
+        composable("employee_report") { EmployeeReportScreen(navController = navController) }
+        composable("customer_report") { CustomerReportScreen(navController = navController) }
+        composable("activity_report") { ActivityReportScreen(navController = navController) }
 
     }
 }
