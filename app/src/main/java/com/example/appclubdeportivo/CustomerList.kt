@@ -4,9 +4,7 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -15,13 +13,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 
 @Composable
-fun ABMCustomerScreen(navController: NavController) {
+fun CustomerListScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
     var selectedButton by remember { mutableStateOf("Lista") }
 
@@ -47,7 +44,7 @@ fun ABMCustomerScreen(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
-                    SearchBar(searchText) { searchText = it }
+                    com.example.appclubdeportivo.ui.theme.SearchBar(searchText) { searchText = it }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -56,9 +53,16 @@ fun ABMCustomerScreen(navController: NavController) {
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         SelectableButton("Lista", selectedButton == "Lista") { selectedButton = "Lista" }
-                        SelectableButton("Alta", selectedButton == "Alta") { selectedButton = "Alta" }
-                        SelectableButton("Baja", selectedButton == "Baja") { selectedButton = "Baja" }
+                        SelectableButton("Alta", selectedButton == "Alta") {
+                            selectedButton = "Alta"
+                            navController.navigate("customer_register")
+                        }
+                        SelectableButton("Baja", selectedButton == "Baja") {
+                            selectedButton = "Baja"
+                            navController.navigate("customer_unsubscribe")
+                        }
                     }
+
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -98,33 +102,7 @@ fun ABMCustomerScreen(navController: NavController) {
     }
 }
 
-@Composable
-fun SearchBar(searchText: String, onSearchTextChange: (String) -> Unit) {
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
-            .background(MaterialTheme.colorScheme.tertiary, CircleShape)
-            .padding(horizontal = 16.dp),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Icon(
-                imageVector = ImageVector.vectorResource(id = R.drawable.search_24px),
-                contentDescription = "Search Icon",
-                tint = MaterialTheme.colorScheme.onSurface
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            BasicTextField(
-                value = searchText,
-                onValueChange = onSearchTextChange,
-                textStyle = TextStyle(color = MaterialTheme.colorScheme.onSurface, fontSize = 16.sp),
-                singleLine = true,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
-    }
-}
+
 
 @Composable
 fun SelectableButton(text: String, isSelected: Boolean, onClick: () -> Unit) {
