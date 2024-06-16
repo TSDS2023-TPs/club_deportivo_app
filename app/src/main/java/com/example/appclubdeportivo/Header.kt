@@ -9,7 +9,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.res.painterResource
@@ -18,12 +17,14 @@ import androidx.compose.ui.res.painterResource
 fun Header(
     title: String,
     showBackButton: Boolean = false,
-    onBackButtonClick: (() -> Unit)? = null
+    onBackButtonClick: (() -> Unit)? = null,
+    backgroundColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.primary,
+    colorText: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onPrimary
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .background(MaterialTheme.colorScheme.primary)
+            .background(backgroundColor)
             .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
@@ -40,7 +41,7 @@ fun Header(
         Text(
             text = title,
             fontSize = 20.sp,
-            color = MaterialTheme.colorScheme.onPrimary
+            color = colorText
         )
     }
 }

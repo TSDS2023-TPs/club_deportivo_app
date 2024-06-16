@@ -7,13 +7,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 
 val LightThemeColors = lightColorScheme(
-    primary = Color(0xFF6200EE),
-    primaryContainer = Color(0xFF3700B3),
+    primary = Color(0xFF76ABAE),
+    primaryContainer = Color(0xFF222831),
     secondary = Color(0xFF03DAC6),
     background = Color(0xFFFFFFFF),
-    surface = Color(0xFFFFFFFF),
+    surface = Color(0xFF3D9C96),
     onPrimary = Color.White,
     onSecondary = Color.Black,
+    tertiary = Color(0xFFE6E6E6),
     onBackground = Color.Black,
     onSurface = Color.Black,
 )

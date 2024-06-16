@@ -11,8 +11,8 @@ fun NavHandler(navController: NavHostController) {
     NavHost(navController, startDestination = "login") {
         composable("login") { LoginScreen(navController = navController) }
         composable("main_menu") { MainMenuScreen(navController = navController) }
-        /*composable("abm_cliente_lista") { ABMClienteListaScreen() }
-        composable("abm_cliente_alta") { ABMClienteAltaScreen() }
+        composable("abm_cliente_lista") { ABMCustomerScreen(navController = navController) }
+        /*composable("abm_cliente_alta") { ABMClienteAltaScreen() }
         composable("abm_cliente_baja") { ABMClienteBajaScreen() }*/
         // Añadir más pantallas según sea necesario
     }
