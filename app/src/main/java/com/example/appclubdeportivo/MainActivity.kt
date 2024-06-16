@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.navigation.compose.rememberNavController
-import com.example.appclubdeportivo.ui.theme.NavHandler
 
 class MainActivity : ComponentActivity() {
 

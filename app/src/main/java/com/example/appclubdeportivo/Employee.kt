@@ -10,11 +10,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 
-data class Customer(val id: String, val name: String, val expiredDate: String, val rate: String)
+data class Employee(val employeeId: String, val name: String, val specialty: String, val salary: Double)
 
 @Composable
-fun CustomerRow(
-    customer: Customer,
+fun EmployeeRow(
+    employee: Employee,
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {
@@ -29,8 +29,8 @@ fun CustomerRow(
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            Text("Nº: ${customer.id}", style = MaterialTheme.typography.bodyMedium)
-            Text(customer.name, style = MaterialTheme.typography.bodyMedium)
+            Text("Nº: ${employee.employeeId}", style = MaterialTheme.typography.bodyMedium)
+            Text(employee.name, style = MaterialTheme.typography.bodyMedium)
         }
         Checkbox(
             checked = isChecked,

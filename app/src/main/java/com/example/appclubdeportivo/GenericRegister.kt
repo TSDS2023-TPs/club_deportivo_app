@@ -14,12 +14,13 @@ import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.SelectableButton
 
 @Composable
-fun CustomerRegisterDetailScreen(navController: NavController) {
+fun GenericRegisterScreen(navController: NavController, headerTitle: String, nextNavRoute: String) {
     var selectedButton by remember { mutableStateOf("Alta") }
-    var gender by remember { mutableStateOf("") }
-    var weight by remember { mutableStateOf("") }
-    var height by remember { mutableStateOf("") }
-    var physicalCheck by remember { mutableStateOf(false) }
+    var name by remember { mutableStateOf("") }
+    var id by remember { mutableStateOf("") }
+    var bornDate by remember { mutableStateOf("") }
+    var telephone by remember { mutableStateOf("") }
+
 
     AppClubDeportivoTheme {
         Box(
@@ -29,7 +30,7 @@ fun CustomerRegisterDetailScreen(navController: NavController) {
         ) {
             Column {
                 Header(
-                    title = "ABM Cliente",
+                    title = headerTitle,
                     showBackButton = true,
                     colorText = MaterialTheme.colorScheme.onSecondary,
                     backgroundColor = MaterialTheme.colorScheme.tertiary,
@@ -63,45 +64,43 @@ fun CustomerRegisterDetailScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text("Ficha técnica", style = MaterialTheme.typography.titleMedium)
+                    Text("Datos Personales", style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = gender,
-                        onValueChange = { gender = it },
-                        placeholder = "Género",
-                        leadingIcon = painterResource(id = R.drawable.gender)
+                        value = name,
+                        onValueChange = { name = it },
+                        placeholder = "Nombre y Apellido",
+                        leadingIcon = painterResource(id = R.drawable.person_24px)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = weight,
-                        onValueChange = { weight = it },
-                        placeholder = "weight",
-                        leadingIcon = painterResource(id = R.drawable.balance)
+                        value = id,
+                        onValueChange = { id = it },
+                        placeholder = "N° de Documento",
+                        leadingIcon = painterResource(id = R.drawable.id_card_24px)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = height,
-                        onValueChange = { height = it },
-                        placeholder = "height",
-                        leadingIcon = painterResource(id = R.drawable.rule)
+                        value = bornDate,
+                        onValueChange = { bornDate = it },
+                        placeholder = "Fecha Nacimiento",
+                        leadingIcon = painterResource(id = R.drawable.calendar_today_24px)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Apto físico")
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Checkbox(checked = physicalCheck, onCheckedChange = { physicalCheck = it })
-                    }
+                    CustomTextField(
+                        value = telephone,
+                        onValueChange = { telephone = it },
+                        placeholder = "Teléfono",
+                        leadingIcon = painterResource(id = R.drawable.telephone)
+                    )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { /* Acción de guardar */ },
+                        onClick = { navController.navigate(nextNavRoute) },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Guardar")
+                        Text("Siguiente")
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))

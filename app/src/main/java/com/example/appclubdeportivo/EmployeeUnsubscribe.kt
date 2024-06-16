@@ -7,19 +7,19 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.SelectableButton
 
 @Composable
-fun CustomerRegisterDetailScreen(navController: NavController) {
-    var selectedButton by remember { mutableStateOf("Alta") }
-    var gender by remember { mutableStateOf("") }
-    var weight by remember { mutableStateOf("") }
-    var height by remember { mutableStateOf("") }
-    var physicalCheck by remember { mutableStateOf(false) }
+fun EmployeeUnsubscribeScreen(navController: NavController) {
+    var searchText by remember { mutableStateOf("") }
+    var selectedButton by remember { mutableStateOf("Baja") }
+    var employees by remember { mutableStateOf(listOf(Employee("1234", "Dario", "Musculacion", 4500.0),
+        Employee("1235", "Juan", "Nutrición", 5000.0)
+    )) }
+    var selectedEmployees by remember { mutableStateOf(setOf<String>()) }
 
     AppClubDeportivoTheme {
         Box(
@@ -29,7 +29,7 @@ fun CustomerRegisterDetailScreen(navController: NavController) {
         ) {
             Column {
                 Header(
-                    title = "ABM Cliente",
+                    title = "ABM Empleado",
                     showBackButton = true,
                     colorText = MaterialTheme.colorScheme.onSecondary,
                     backgroundColor = MaterialTheme.colorScheme.tertiary,
@@ -43,65 +43,54 @@ fun CustomerRegisterDetailScreen(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
+                    com.example.appclubdeportivo.ui.theme.SearchBar(searchText) { searchText = it }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
                         SelectableButton("Lista", selectedButton == "Lista") {
                             selectedButton = "Lista"
-                            navController.navigate("customer_list")
+                            navController.navigate("employee_list")
                         }
                         SelectableButton("Alta", selectedButton == "Alta") {
                             selectedButton = "Alta"
-                            navController.navigate("customer_register")
+                            navController.navigate("employee_register")
                         }
                         SelectableButton("Baja", selectedButton == "Baja") {
                             selectedButton = "Baja"
-                            navController.navigate("customer_unsubscribe")
+                            navController.navigate("employee_unsubscribe")
                         }
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text("Ficha técnica", style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CustomTextField(
-                        value = gender,
-                        onValueChange = { gender = it },
-                        placeholder = "Género",
-                        leadingIcon = painterResource(id = R.drawable.gender)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CustomTextField(
-                        value = weight,
-                        onValueChange = { weight = it },
-                        placeholder = "weight",
-                        leadingIcon = painterResource(id = R.drawable.balance)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CustomTextField(
-                        value = height,
-                        onValueChange = { height = it },
-                        placeholder = "height",
-                        leadingIcon = painterResource(id = R.drawable.rule)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Apto físico")
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Checkbox(checked = physicalCheck, onCheckedChange = { physicalCheck = it })
+                    employees.forEach { employee ->
+                        EmployeeRow(
+                            employee = employee,
+                            isChecked = selectedEmployees.contains(employee.employeeId),
+                            onCheckedChange = { isChecked ->
+                                selectedEmployees = if (isChecked) {
+                                    selectedEmployees + employee.employeeId
+                                } else {
+                                    selectedEmployees - employee.employeeId
+                                }
+                            }
+                        )
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     Button(
-                        onClick = { /* Acción de guardar */ },
+                        onClick = {
+                            employees = employees.filterNot { selectedEmployees.contains(it.employeeId) }
+                            selectedEmployees = emptySet()
+                        },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Guardar")
+                        Text("Confirmar")
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -119,4 +108,3 @@ fun CustomerRegisterDetailScreen(navController: NavController) {
         }
     }
 }
-

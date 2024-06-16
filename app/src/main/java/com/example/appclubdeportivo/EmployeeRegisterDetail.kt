@@ -11,19 +11,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
+import com.example.appclubdeportivo.ui.theme.SelectableButton
 
 @Composable
-fun CustomerRegisterScreen(navController: NavController) {
+fun EmployeeRegisterDetailScreen(navController: NavController) {
     var selectedButton by remember { mutableStateOf("Alta") }
-    var nombre by remember { mutableStateOf("") }
-    var documento by remember { mutableStateOf("") }
-    var fechaNacimiento by remember { mutableStateOf("") }
-    var telefono by remember { mutableStateOf("") }
-    var genero by remember { mutableStateOf("") }
-    var peso by remember { mutableStateOf("") }
-    var altura by remember { mutableStateOf("") }
-    var aptoFisico by remember { mutableStateOf(false) }
-
+    var specialty by remember { mutableStateOf("") }
+    var weekHours by remember { mutableStateOf("") }
+    var hourRate by remember { mutableStateOf("") }
     AppClubDeportivoTheme {
         Box(
             modifier = Modifier
@@ -66,43 +61,36 @@ fun CustomerRegisterScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text("Datos Personales", style = MaterialTheme.typography.titleMedium)
+                    Text("Ficha técnica", style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = nombre,
-                        onValueChange = { nombre = it },
-                        placeholder = "Nombre y Apellido",
-                        leadingIcon = painterResource(id = R.drawable.person_24px)
+                        value = specialty,
+                        onValueChange = { specialty = it },
+                        placeholder = "Especialidad",
+                        leadingIcon = painterResource(id = R.drawable.academic)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = documento,
-                        onValueChange = { documento = it },
-                        placeholder = "N° de Documento",
-                        leadingIcon = painterResource(id = R.drawable.id_card_24px)
+                        value = weekHours,
+                        onValueChange = { weekHours = it },
+                        placeholder = "Horas Semanales",
+                        leadingIcon = painterResource(id = R.drawable.clock)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = fechaNacimiento,
-                        onValueChange = { fechaNacimiento = it },
-                        placeholder = "Fecha Nacimiento",
-                        leadingIcon = painterResource(id = R.drawable.calendar_today_24px)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CustomTextField(
-                        value = telefono,
-                        onValueChange = { telefono = it },
-                        placeholder = "Teléfono",
-                        leadingIcon = painterResource(id = R.drawable.telephone)
+                        value = hourRate,
+                        onValueChange = { hourRate = it },
+                        placeholder = "Valor Hora",
+                        leadingIcon = painterResource(id = R.drawable.money)
                     )
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { navController.navigate("customer_register_detail") },
+                        onClick = { /* Acción de guardar */ },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Siguiente")
+                        Text("Guardar")
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))

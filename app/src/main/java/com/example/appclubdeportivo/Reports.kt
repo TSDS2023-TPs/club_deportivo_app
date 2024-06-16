@@ -11,7 +11,7 @@ import androidx.navigation.NavController
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 
 @Composable
-fun MainMenuScreen(navController: NavController) {
+fun ReportsScreen(navController: NavController) {
 
     AppClubDeportivoTheme {
         Box(
@@ -20,7 +20,7 @@ fun MainMenuScreen(navController: NavController) {
                 .background(MaterialTheme.colorScheme.background)
         ) {
             Column {
-                Header(title = "Menú", showBackButton = false, colorText = MaterialTheme.colorScheme.onSecondary, backgroundColor = MaterialTheme.colorScheme.tertiary)
+                Header(title = "Reportes", showBackButton = true, colorText = MaterialTheme.colorScheme.onSecondary, backgroundColor = MaterialTheme.colorScheme.tertiary, onBackButtonClick = { navController.popBackStack() })
                 Spacer(modifier = Modifier.height(24.dp))
                 Column(
                     modifier = Modifier
@@ -30,11 +30,21 @@ fun MainMenuScreen(navController: NavController) {
                     verticalArrangement = Arrangement.Top
                 ) {
                     Button(
+                        onClick = { navController.navigate("expired_list") },
+                        contentPadding = PaddingValues(vertical = 20.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Vencimientos")
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Button(
                         onClick = { navController.navigate("customer_list") },
                         contentPadding = PaddingValues(vertical = 20.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("ABM Cliente")
+                        Text("Clientes")
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
@@ -44,27 +54,17 @@ fun MainMenuScreen(navController: NavController) {
                         contentPadding = PaddingValues(vertical = 20.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("ABM Empleado")
+                        Text("Empleados")
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { navController.navigate("payment") },
+                        onClick = { navController.navigate("activities_lis") },
                         contentPadding = PaddingValues(vertical = 20.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Registrar Pago")
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Button(
-                        onClick = { navController.navigate("reports") },
-                        contentPadding = PaddingValues(vertical = 20.dp),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Reportes")
+                        Text("Actividades")
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))

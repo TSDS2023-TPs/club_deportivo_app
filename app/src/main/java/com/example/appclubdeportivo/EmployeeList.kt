@@ -14,12 +14,9 @@ import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.GenericCard
 import com.example.appclubdeportivo.ui.theme.PersonalizedText
 import com.example.appclubdeportivo.ui.theme.SelectableButton
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 @Composable
-fun CustomerListScreen(navController: NavController) {
+fun EmployeeListScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
     var selectedButton by remember { mutableStateOf("Lista") }
 
@@ -31,7 +28,7 @@ fun CustomerListScreen(navController: NavController) {
         ) {
             Column {
                 Header(
-                    title = "ABM Cliente",
+                    title = "ABM Empleado",
                     showBackButton = true,
                     colorText = MaterialTheme.colorScheme.onSecondary,
                     backgroundColor = MaterialTheme.colorScheme.tertiary,
@@ -56,44 +53,31 @@ fun CustomerListScreen(navController: NavController) {
                         SelectableButton("Lista", selectedButton == "Lista") { selectedButton = "Lista" }
                         SelectableButton("Alta", selectedButton == "Alta") {
                             selectedButton = "Alta"
-                            navController.navigate("customer_register")
+                            navController.navigate("employee_register")
                         }
                         SelectableButton("Baja", selectedButton == "Baja") {
                             selectedButton = "Baja"
-                            navController.navigate("customer_unsubscribe")
+                            navController.navigate("employee_unsubscribe")
                         }
                     }
 
 
                     Spacer(modifier = Modifier.height(16.dp))
+                    val exampleEmployees = listOf(Employee("1234", "Dario", "Musculacion", 4500.0),
+                        Employee("1235", "Juan", "Nutrición", 5000.0))
 
-                    val exampleCustomers = listOf(Customer("1234", "Pepe Pepito", "10-04-2024", "$4500"),
-                        Customer("1235", "Pepe Pepin", "31-12-2024", "$1200"))
-
-                    val currentDate = Calendar.getInstance().time
-                    val dateFormat = SimpleDateFormat("dd-MM-yyyy", Locale.getDefault())
-
-                    for (customer in exampleCustomers) {
-                        val expirationDate = dateFormat.parse(customer.expiredDate)
-
-                        val backgroundColor = if (expirationDate < currentDate) {
-                            Color.Red
-                        } else {
-                            Color.Green
-                        }
-
+                    for (employee in exampleEmployees) {
                         GenericCard(
-                            field1 = PersonalizedText(customer.id),
-                            field2 = PersonalizedText(customer.name),
-                            field3 = PersonalizedText(customer.expiredDate, backgroundColor = backgroundColor),
-                            field4 = PersonalizedText(customer.rate, backgroundColor = Color.White),
-                            field5 = PersonalizedText("Vencimiento Cuota"),
-                            field6 = PersonalizedText("Monto"),
+                            field1 = PersonalizedText(employee.employeeId),
+                            field2 = PersonalizedText(employee.name),
+                            field3 = PersonalizedText(employee.specialty),
+                            field4 = PersonalizedText(employee.salary.toString(), backgroundColor = Color.White),
+                            field5 = PersonalizedText("Especialidad"),
+                            field6 = PersonalizedText("Valor Hora"),
                             onEditClick = { /* a implementar */ }
                         )
-                            Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(16.dp))
                     }
-
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Text(
@@ -109,7 +93,3 @@ fun CustomerListScreen(navController: NavController) {
         }
     }
 }
-
-
-
-

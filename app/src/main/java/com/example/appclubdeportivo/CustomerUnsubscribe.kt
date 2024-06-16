@@ -10,15 +10,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
+import com.example.appclubdeportivo.ui.theme.SelectableButton
 
 @Composable
 fun CustomerUnsubscribeScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
     var selectedButton by remember { mutableStateOf("Baja") }
-    var customers by remember { mutableStateOf(listOf(
-        Customer("1234", "Pepe Pepito"),
-        Customer("1235", "Pepe Pepin")
-    )) }
+    var customers by remember { mutableStateOf(listOf(Customer("1234", "Pepe Pepito", "10-04-2024", "$4500"),
+        Customer("1235", "Pepe Pepin", "31-12-2024", "$1200"))
+    )}
     var selectedCustomers by remember { mutableStateOf(setOf<String>()) }
 
     AppClubDeportivoTheme {
