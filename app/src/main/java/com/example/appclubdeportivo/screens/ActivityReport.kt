@@ -1,7 +1,8 @@
-package com.example.appclubdeportivo
+package com.example.appclubdeportivo.screens
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavController
+import com.example.appclubdeportivo.view_entities.Activity
 
 @Composable
 fun ActivityReportScreen(navController: NavController) {

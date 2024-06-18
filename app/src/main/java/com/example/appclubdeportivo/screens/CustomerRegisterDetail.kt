@@ -1,4 +1,4 @@
-package com.example.appclubdeportivo
+package com.example.appclubdeportivo.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -10,17 +10,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.appclubdeportivo.R
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
+import com.example.appclubdeportivo.ui.theme.CustomTextField
 import com.example.appclubdeportivo.ui.theme.SelectableButton
 
 @Composable
-fun GenericRegisterScreen(navController: NavController, headerTitle: String, nextNavRoute: String) {
+fun CustomerRegisterDetailScreen(navController: NavController) {
     var selectedButton by remember { mutableStateOf("Alta") }
-    var name by remember { mutableStateOf("") }
-    var id by remember { mutableStateOf("") }
-    var bornDate by remember { mutableStateOf("") }
-    var telephone by remember { mutableStateOf("") }
-
+    var gender by remember { mutableStateOf("") }
+    var weight by remember { mutableStateOf("") }
+    var height by remember { mutableStateOf("") }
+    var physicalCheck by remember { mutableStateOf(false) }
 
     AppClubDeportivoTheme {
         Box(
@@ -30,7 +31,7 @@ fun GenericRegisterScreen(navController: NavController, headerTitle: String, nex
         ) {
             Column {
                 Header(
-                    title = headerTitle,
+                    title = "ABM Cliente",
                     showBackButton = true,
                     colorText = MaterialTheme.colorScheme.onSecondary,
                     backgroundColor = MaterialTheme.colorScheme.tertiary,
@@ -64,43 +65,68 @@ fun GenericRegisterScreen(navController: NavController, headerTitle: String, nex
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text("Datos Personales", style = MaterialTheme.typography.titleMedium)
+                    Text("Ficha técnica", style = MaterialTheme.typography.titleMedium)
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = name,
-                        onValueChange = { name = it },
-                        placeholder = "Nombre y Apellido",
-                        leadingIcon = painterResource(id = R.drawable.person_24px)
+                        value = gender,
+                        onValueChange = { gender = it },
+                        placeholder = "Género",
+                        leadingIcon = painterResource(id = R.drawable.gender)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = id,
-                        onValueChange = { id = it },
-                        placeholder = "N° de Documento",
-                        leadingIcon = painterResource(id = R.drawable.id_card_24px)
+                        value = weight,
+                        onValueChange = { weight = it },
+                        placeholder = "weight",
+                        leadingIcon = painterResource(id = R.drawable.balance)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = bornDate,
-                        onValueChange = { bornDate = it },
-                        placeholder = "Fecha Nacimiento",
-                        leadingIcon = painterResource(id = R.drawable.calendar_today_24px)
+                        value = height,
+                        onValueChange = { height = it },
+                        placeholder = "height",
+                        leadingIcon = painterResource(id = R.drawable.rule)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
-                    CustomTextField(
-                        value = telephone,
-                        onValueChange = { telephone = it },
-                        placeholder = "Teléfono",
-                        leadingIcon = painterResource(id = R.drawable.telephone)
-                    )
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Apto físico")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Checkbox(checked = physicalCheck, onCheckedChange = { physicalCheck = it })
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    var selectedOption by remember { mutableStateOf("Socio") }
+
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Socio")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        RadioButton(
+                            selected = selectedOption == "Socio",
+                            onClick = { selectedOption = "Socio" }
+                        )
+                        Spacer(modifier = Modifier.width(16.dp))
+                        Text("No Socio")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        RadioButton(
+                            selected = selectedOption == "No Socio",
+                            onClick = { selectedOption = "No Socio" }
+                        )
+                    }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { navController.navigate(nextNavRoute) },
+                        onClick = { /* Acción de guardar */ },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Siguiente")
+                        Text("Guardar")
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))

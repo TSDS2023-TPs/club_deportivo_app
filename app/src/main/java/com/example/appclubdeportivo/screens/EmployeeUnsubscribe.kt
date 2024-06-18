@@ -1,4 +1,4 @@
-package com.example.appclubdeportivo
+package com.example.appclubdeportivo.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,18 +7,21 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
-import com.example.appclubdeportivo.ui.theme.GenericCard
-import com.example.appclubdeportivo.ui.theme.PersonalizedText
 import com.example.appclubdeportivo.ui.theme.SelectableButton
+import com.example.appclubdeportivo.view_entities.Employee
 
 @Composable
-fun EmployeeListScreen(navController: NavController) {
+fun EmployeeUnsubscribeScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
-    var selectedButton by remember { mutableStateOf("Lista") }
+    var selectedButton by remember { mutableStateOf("Baja") }
+    var employees by remember { mutableStateOf(listOf(
+        Employee("1234", "Dario", "Musculacion", 4500.0),
+        Employee("1235", "Juan", "Nutrición", 5000.0)
+    )) }
+    var selectedEmployees by remember { mutableStateOf(setOf<String>()) }
 
     AppClubDeportivoTheme {
         Box(
@@ -50,7 +53,10 @@ fun EmployeeListScreen(navController: NavController) {
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
                     ) {
-                        SelectableButton("Lista", selectedButton == "Lista") { selectedButton = "Lista" }
+                        SelectableButton("Lista", selectedButton == "Lista") {
+                            selectedButton = "Lista"
+                            navController.navigate("employee_list")
+                        }
                         SelectableButton("Alta", selectedButton == "Alta") {
                             selectedButton = "Alta"
                             navController.navigate("employee_register")
@@ -61,23 +67,34 @@ fun EmployeeListScreen(navController: NavController) {
                         }
                     }
 
-
                     Spacer(modifier = Modifier.height(16.dp))
-                    val exampleEmployees = listOf(Employee("1234", "Dario", "Musculacion", 4500.0),
-                        Employee("1235", "Juan", "Nutrición", 5000.0))
 
-                    for (employee in exampleEmployees) {
-                        GenericCard(
-                            field1 = PersonalizedText(employee.employeeId),
-                            field2 = PersonalizedText(employee.name),
-                            field3 = PersonalizedText(employee.specialty),
-                            field4 = PersonalizedText(employee.salary.toString(), backgroundColor = Color.White),
-                            field5 = PersonalizedText("Especialidad"),
-                            field6 = PersonalizedText("Valor Hora"),
-                            onEditClick = { /* a implementar */ }
+                    employees.forEach { employee ->
+                        EmployeeRow(
+                            employee = employee,
+                            isChecked = selectedEmployees.contains(employee.employeeId),
+                            onCheckedChange = { isChecked ->
+                                selectedEmployees = if (isChecked) {
+                                    selectedEmployees + employee.employeeId
+                                } else {
+                                    selectedEmployees - employee.employeeId
+                                }
+                            }
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
                     }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    Button(
+                        onClick = {
+                            employees = employees.filterNot { selectedEmployees.contains(it.employeeId) }
+                            selectedEmployees = emptySet()
+                        },
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Confirmar")
+                    }
+
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Text(

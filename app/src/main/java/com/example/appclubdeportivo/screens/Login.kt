@@ -1,4 +1,4 @@
-package com.example.appclubdeportivo
+package com.example.appclubdeportivo.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -16,7 +16,9 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.appclubdeportivo.R
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
+import com.example.appclubdeportivo.ui.theme.CustomTextField
 
 @Composable
 fun LoginScreen(navController: NavController) {

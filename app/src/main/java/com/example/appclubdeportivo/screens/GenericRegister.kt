@@ -1,25 +1,32 @@
-package com.example.appclubdeportivo
+package com.example.appclubdeportivo.screens
 
+import CustomTextField
+import android.content.Context
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.appclubdeportivo.R
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.SelectableButton
+import java.util.Calendar
 
 @Composable
-fun CustomerUnsubscribeScreen(navController: NavController) {
-    var searchText by remember { mutableStateOf("") }
-    var selectedButton by remember { mutableStateOf("Baja") }
-    var customers by remember { mutableStateOf(listOf(Customer("1", "Pepito", activities = listOf(Activity(1, "Natación")), expiredDate = "2024-12-31", amount= "2000"),
-        Customer("2", "Pepe", activities = listOf(Activity(1, "Funcional")), expiredDate = "2024-02-21", amount= "4000"))
-    )}
-    var selectedCustomers by remember { mutableStateOf(setOf<String>()) }
+fun GenericRegisterScreen(navController: NavController, headerTitle: String, nextNavRoute: String) {
+    var selectedButton by remember { mutableStateOf("Alta") }
+    var name by remember { mutableStateOf("") }
+    var id by remember { mutableStateOf("") }
+    var bornDate by remember { mutableStateOf("") }
+    var telephone by remember { mutableStateOf("") }
+
 
     AppClubDeportivoTheme {
         Box(
@@ -29,7 +36,7 @@ fun CustomerUnsubscribeScreen(navController: NavController) {
         ) {
             Column {
                 Header(
-                    title = "ABM Cliente",
+                    title = headerTitle,
                     showBackButton = true,
                     colorText = MaterialTheme.colorScheme.onSecondary,
                     backgroundColor = MaterialTheme.colorScheme.tertiary,
@@ -43,10 +50,6 @@ fun CustomerUnsubscribeScreen(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
-                    com.example.appclubdeportivo.ui.theme.SearchBar(searchText) { searchText = it }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
@@ -67,30 +70,46 @@ fun CustomerUnsubscribeScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    customers.forEach { customer ->
-                        CustomerRow(
-                            customer = customer,
-                            isChecked = selectedCustomers.contains(customer.id),
-                            onCheckedChange = { isChecked ->
-                                selectedCustomers = if (isChecked) {
-                                    selectedCustomers + customer.id
-                                } else {
-                                    selectedCustomers - customer.id
-                                }
-                            }
-                        )
-                    }
+                    Text("Datos Personales", style = MaterialTheme.typography.titleMedium)
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CustomTextField(
+                        value = name,
+                        onValueChange = { name = it },
+                        placeholder = "Nombre y Apellido",
+                        leadingIcon = painterResource(id = R.drawable.person_24px)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CustomTextField(
+                        value = id,
+                        onValueChange = { id = it },
+                        placeholder = "N° de Documento",
+                        leadingIcon = painterResource(id = R.drawable.id_card_24px)
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CustomTextField(
+                        value = bornDate,
+                        onValueChange = { bornDate = it },
+                        placeholder = "Fecha Nacimiento",
+                        leadingIcon = painterResource(id = R.drawable.calendar_today_24px),
+                        readOnly = true,
+                        onClick = {  }
+                    )
+                    Spacer(modifier = Modifier.height(8.dp))
+                    CustomTextField(
+                        value = telephone,
+                        onValueChange = { telephone = it },
+                        placeholder = "Teléfono",
+                        leadingIcon = painterResource(id = R.drawable.telephone),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+                    )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = {
-                            customers = customers.filterNot { selectedCustomers.contains(it.id) }
-                            selectedCustomers = emptySet()
-                        },
+                        onClick = { navController.navigate(nextNavRoute) },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Confirmar")
+                        Text("Siguiente")
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -103,8 +122,10 @@ fun CustomerUnsubscribeScreen(navController: NavController) {
                             navController.navigate("login")
                         }
                     )
-                }
+
             }
         }
     }
+}
+
 }

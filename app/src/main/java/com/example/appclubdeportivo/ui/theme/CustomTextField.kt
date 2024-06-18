@@ -1,6 +1,5 @@
-package com.example.appclubdeportivo
-
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -25,7 +24,7 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
+import java.util.*
 
 @Composable
 fun CustomTextField(
@@ -35,6 +34,8 @@ fun CustomTextField(
     leadingIcon: Painter,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
+    readOnly: Boolean = false,
+    onClick: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     shape: Shape = RoundedCornerShape(10.dp)
 ) {
@@ -45,6 +46,13 @@ fun CustomTextField(
             .background(Color.Gray.copy(alpha = 0.1f), shape)
             .clip(shape)
             .padding(horizontal = 16.dp, vertical = 14.dp)
+            .run {
+                if (onClick != null && !readOnly) {
+                    clickable(enabled = true, onClick = onClick)
+                } else {
+                    this
+                }
+            }
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -55,29 +63,40 @@ fun CustomTextField(
                 tint = Color.Gray,
                 modifier = Modifier.size(24.dp)
             )
-            BasicTextField(
-                value = value,
-                onValueChange = onValueChange,
-                modifier = Modifier
-                    .weight(1f)
-                    .padding(start = 8.dp),
-                keyboardOptions = keyboardOptions,
-                visualTransformation = visualTransformation,
-                decorationBox = { innerTextField ->
-                    if (value.isEmpty()) {
-                        Text(
-                            text = placeholder,
-                            color = Color.Gray.copy(alpha = 0.6f),
-                            fontSize = 16.sp
-                        )
-                    }
-                    innerTextField()
-                },
-                textStyle = LocalTextStyle.current.copy(
-                    color = Color.Black,
-                    fontSize = 16.sp
+            if (readOnly) {
+                Text(
+                    text = value.takeIf { it.isNotEmpty() } ?: placeholder,
+                    color = if (value.isNotEmpty()) Color.Black else Color.Gray.copy(alpha = 0.6f),
+                    fontSize = 16.sp,
+                    modifier = Modifier
+                        .padding(start = 8.dp)
+                        .weight(1f)
                 )
-            )
+            } else {
+                BasicTextField(
+                    value = value,
+                    onValueChange = onValueChange,
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(start = 8.dp),
+                    keyboardOptions = keyboardOptions,
+                    visualTransformation = visualTransformation,
+                    decorationBox = { innerTextField ->
+                        if (value.isEmpty()) {
+                            Text(
+                                text = placeholder,
+                                color = Color.Gray.copy(alpha = 0.6f),
+                                fontSize = 16.sp
+                            )
+                        }
+                        innerTextField()
+                    },
+                    textStyle = LocalTextStyle.current.copy(
+                        color = Color.Black,
+                        fontSize = 16.sp
+                    )
+                )
+            }
             if (trailingIcon != null) {
                 Spacer(modifier = Modifier.width(8.dp))
                 trailingIcon()
@@ -85,3 +104,4 @@ fun CustomTextField(
         }
     }
 }
+

@@ -1,4 +1,4 @@
-package com.example.appclubdeportivo
+package com.example.appclubdeportivo.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -19,6 +19,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
+import com.example.appclubdeportivo.R
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 
 @Composable

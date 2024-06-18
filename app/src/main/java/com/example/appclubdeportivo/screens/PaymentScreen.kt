@@ -1,4 +1,4 @@
-package com.example.appclubdeportivo
+package com.example.appclubdeportivo.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.SearchBar
+import com.example.appclubdeportivo.view_entities.Payment
 
 @Composable
 fun PaymentRegisterScreen(navController: NavController) {

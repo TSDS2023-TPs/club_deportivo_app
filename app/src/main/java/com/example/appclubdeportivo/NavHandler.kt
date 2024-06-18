@@ -4,6 +4,21 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.appclubdeportivo.screens.ActivityReportScreen
+import com.example.appclubdeportivo.screens.CustomerListScreen
+import com.example.appclubdeportivo.screens.CustomerRegisterDetailScreen
+import com.example.appclubdeportivo.screens.CustomerReportScreen
+import com.example.appclubdeportivo.screens.CustomerUnsubscribeScreen
+import com.example.appclubdeportivo.screens.EmployeeListScreen
+import com.example.appclubdeportivo.screens.EmployeeRegisterDetailScreen
+import com.example.appclubdeportivo.screens.EmployeeReportScreen
+import com.example.appclubdeportivo.screens.EmployeeUnsubscribeScreen
+import com.example.appclubdeportivo.screens.ExpirationReportScreen
+import com.example.appclubdeportivo.screens.GenericRegisterScreen
+import com.example.appclubdeportivo.screens.LoginScreen
+import com.example.appclubdeportivo.screens.MainMenuScreen
+import com.example.appclubdeportivo.screens.PaymentRegisterScreen
+import com.example.appclubdeportivo.screens.ReportsScreen
 
 
 @Composable

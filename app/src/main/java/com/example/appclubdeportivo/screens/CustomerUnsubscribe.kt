@@ -1,4 +1,4 @@
-package com.example.appclubdeportivo
+package com.example.appclubdeportivo.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,19 +7,25 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.SelectableButton
+import com.example.appclubdeportivo.view_entities.Activity
+import com.example.appclubdeportivo.view_entities.Customer
 
 @Composable
-fun CustomerRegisterDetailScreen(navController: NavController) {
-    var selectedButton by remember { mutableStateOf("Alta") }
-    var gender by remember { mutableStateOf("") }
-    var weight by remember { mutableStateOf("") }
-    var height by remember { mutableStateOf("") }
-    var physicalCheck by remember { mutableStateOf(false) }
+fun CustomerUnsubscribeScreen(navController: NavController) {
+    var searchText by remember { mutableStateOf("") }
+    var selectedButton by remember { mutableStateOf("Baja") }
+    var customers by remember { mutableStateOf(listOf(
+        Customer("1", "Pepito", activities = listOf(
+        Activity(1, "Natación")
+    ), expiredDate = "2024-12-31", amount= "2000"),
+        Customer("2", "Pepe", activities = listOf(Activity(1, "Funcional")), expiredDate = "2024-02-21", amount= "4000")
+    )
+    )}
+    var selectedCustomers by remember { mutableStateOf(setOf<String>()) }
 
     AppClubDeportivoTheme {
         Box(
@@ -43,6 +49,10 @@ fun CustomerRegisterDetailScreen(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
+                    com.example.appclubdeportivo.ui.theme.SearchBar(searchText) { searchText = it }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.SpaceEvenly
@@ -63,45 +73,30 @@ fun CustomerRegisterDetailScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    Text("Ficha técnica", style = MaterialTheme.typography.titleMedium)
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CustomTextField(
-                        value = gender,
-                        onValueChange = { gender = it },
-                        placeholder = "Género",
-                        leadingIcon = painterResource(id = R.drawable.gender)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CustomTextField(
-                        value = weight,
-                        onValueChange = { weight = it },
-                        placeholder = "weight",
-                        leadingIcon = painterResource(id = R.drawable.balance)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    CustomTextField(
-                        value = height,
-                        onValueChange = { height = it },
-                        placeholder = "height",
-                        leadingIcon = painterResource(id = R.drawable.rule)
-                    )
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Apto físico")
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Checkbox(checked = physicalCheck, onCheckedChange = { physicalCheck = it })
+                    customers.forEach { customer ->
+                        CustomerRow(
+                            customer = customer,
+                            isChecked = selectedCustomers.contains(customer.id),
+                            onCheckedChange = { isChecked ->
+                                selectedCustomers = if (isChecked) {
+                                    selectedCustomers + customer.id
+                                } else {
+                                    selectedCustomers - customer.id
+                                }
+                            }
+                        )
                     }
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
 
                     Button(
-                        onClick = { /* Acción de guardar */ },
+                        onClick = {
+                            customers = customers.filterNot { selectedCustomers.contains(it.id) }
+                            selectedCustomers = emptySet()
+                        },
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Guardar")
+                        Text("Confirmar")
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
@@ -119,4 +114,3 @@ fun CustomerRegisterDetailScreen(navController: NavController) {
         }
     }
 }
-
