@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +23,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.appclubdeportivo.R
 
@@ -40,53 +42,98 @@ fun GenericCard(
     onEditClick: () -> Unit
 ) {
     Card(
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(16.dp),
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
-
-    ) { Box(
-        modifier = Modifier
-            .background(
-                brush = Brush.verticalGradient(
-                    colors = listOf(
-                        Color(0xFF76ABAE).copy(alpha = 0.8f),
-                        Color(0xFF76ABAE).copy(alpha = 0.6f),
-                        Color(0xFFF5F5F5).copy(alpha = 1f),
+    ) {
+        Box(
+            modifier = Modifier
+                .background(
+                    brush = Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFF76ABAE),
+                            Color(0xFFEEEEEE),
+                        )
                     )
                 )
-            )
-            .padding(16.dp)
-    ){
-        Column(modifier = Modifier.padding(16.dp)) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth(),
-            ) {
-                Text(field1.text, style = MaterialTheme.typography.bodyMedium, color = field1.color, modifier = Modifier.background(color = field1.backgroundColor ?: Color.Transparent))
-                IconButton(onClick = onEditClick) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.edit_24px),
-                        contentDescription = "Edit Icon",
-                        tint = MaterialTheme.colorScheme.primary
+                .padding(16.dp)
+        ) {
+            Column {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(
+                        text = field1.text,
+                        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Bold),
+                        color = field1.color
+                    )
+                    Text(
+                        text = field2.text,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = field2.color
+                    )
+                    IconButton(onClick = onEditClick) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.edit_24px),
+                            contentDescription = "Edit Icon",
+                            tint = Color(0xFF76ABAE)
+                        )
+                    }
+                }
+                Divider(
+                    color = Color.Gray,
+                    thickness = 1.dp,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
+
+                Spacer(modifier = Modifier.height(16.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = field3.text,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.White,
+                        modifier = Modifier
+                            .background(
+                                color = field3.backgroundColor ?: Color.Transparent,
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                    Text(
+                        text = field4.text,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = field4.color,
+                        modifier = Modifier
+                            .background(
+                                color = Color.White,
+                                shape = RoundedCornerShape(4.dp)
+                            )
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                    )
+                }
+                Spacer(modifier = Modifier.height(4.dp))
+                Row(
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(
+                        text = field5.text,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = field6.text,
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.Gray
                     )
                 }
             }
-            Text(field2.text, style = MaterialTheme.typography.bodyMedium, color = field2.color, modifier = Modifier.background(color = field2.backgroundColor ?: Color.Transparent))
-            Spacer(modifier = Modifier.height(8.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(field3.text, style = MaterialTheme.typography.bodyMedium, color = field3.color, modifier = Modifier.background(color = field3.backgroundColor ?: Color.Transparent))
-                Text(field4.text, style = MaterialTheme.typography.bodyMedium, color = field4.color, modifier = Modifier.background(color = field4.backgroundColor ?: Color.Transparent))
-            }
-            Text(field5.text, style = MaterialTheme.typography.bodySmall)
-            Text(field6.text, style = MaterialTheme.typography.bodySmall)
-
         }
-    }
     }
 }

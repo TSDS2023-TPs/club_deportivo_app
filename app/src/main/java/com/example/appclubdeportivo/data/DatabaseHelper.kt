@@ -1,55 +1,62 @@
 package com.example.appclubdeportivo.data
-
-import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
-import android.database.sqlite.SQLiteDatabase
-import android.database.sqlite.SQLiteOpenHelper
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.example.appclubdeportivo.db_entities.*
 
-class DatabaseHelper(context: Context) : SQLiteOpenHelper(context, DATABASE_NAME, null, DATABASE_VERSION) {
+@Database(
+    entities = [
+        Role::class, User::class, DocumentType::class, Person::class,
+        Employee::class, Specialty::class, Professor::class, Doctor::class,
+        AccountStatus::class, Activity::class, Customer::class, Class::class,
+        Attendance::class, Routine::class, PaymentMethod::class, Fee::class,
+        Invoice::class, CustomerActivity::class
+    ],
+    version = 1,
+    exportSchema = false
+)
+abstract class AppDatabase : RoomDatabase() {
+    abstract fun roleDao():RoleDao
+    abstract fun userDao(): UserDao
+    abstract fun documentTypeDao(): DocumentTypeDao
+    abstract fun personDao(): PersonDao
+    abstract fun employeeDao(): EmployeeDao
+    abstract fun specialtyDao(): SpecialtyDao
+    abstract fun professorDao(): ProfessorDao
+    abstract fun doctorDao(): DoctorDao
+    abstract fun accountStatusDao(): AccountStatusDao
+    abstract fun activityDao(): ActivityDao
+    abstract fun customerDao(): CustomerDao
+    abstract fun classDao(): ClassDao
+    abstract fun attendanceDao(): AttendanceDao
+    abstract fun routineDao(): RoutineDao
+    abstract fun paymentMethodDao(): PaymentMethodDao
+    abstract fun feeDao(): FeeDao
+    abstract fun invoiceDao(): InvoiceDao
+    abstract fun customerActivityDao(): CustomerActivityDao
 
     companion object {
-        private const val DATABASE_NAME = "proyecto_club_deportivo.sqlite"
-        private const val DATABASE_VERSION = 1
-    }
+        @Volatile
+        private var INSTANCE: AppDatabase? = null
 
-    override fun onCreate(db: SQLiteDatabase?) {
-
-    }
-
-    override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
-
-    }
-
-
-    fun insert(tableName: String, values: ContentValues): Long {
-        val db = writableDatabase
-        return db.insert(tableName, null, values)
-    }
-
-    fun update(tableName: String, values: ContentValues, whereClause: String, whereArgs: Array<String>): Int {
-        val db = writableDatabase
-        return db.update(tableName, values, whereClause, whereArgs)
-    }
-
-    fun delete(tableName: String, whereClause: String, whereArgs: Array<String>): Int {
-        val db = writableDatabase
-        return db.delete(tableName, whereClause, whereArgs)
-    }
-
-    fun <T> getAll(tableName: String, mapper: (Cursor) -> T): List<T> {
-        val items = mutableListOf<T>()
-        val db = readableDatabase
-        val cursor = db.query(tableName, null, null, null, null, null, null)
-        cursor.use {
-            while (it.moveToNext()) {
-                items.add(mapper(it))
+        fun getDatabase(context: Context): AppDatabase {
+            return INSTANCE ?: synchronized(this) {
+                val instance = Room.databaseBuilder(
+                    context.applicationContext,
+                    AppDatabase::class.java,
+                    "proyecto_club_deportivo.db"
+                )
+                    .fallbackToDestructiveMigration()
+                    .build()
+                INSTANCE = instance
+                instance
             }
         }
-        return items
+
+        fun databaseExists(context: Context): Boolean {
+            val dbFile = context.getDatabasePath("proyecto_club_deportivo.db")
+            return dbFile.exists()
+        }
     }
-
-
-
-
 }

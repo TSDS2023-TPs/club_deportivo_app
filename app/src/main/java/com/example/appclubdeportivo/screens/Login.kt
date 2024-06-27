@@ -1,4 +1,5 @@
 package com.example.appclubdeportivo.screens
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
@@ -17,15 +18,22 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.R
+import com.example.appclubdeportivo.data.AppDatabase
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.CustomTextField
+import com.example.appclubdeportivo.view_models.LoginViewModel
+import kotlinx.coroutines.launch
 
 @Composable
-fun LoginScreen(navController: NavController) {
+fun LoginScreen(navController: NavController, appDatabase: AppDatabase) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var passwordVisible by remember { mutableStateOf(false) }
     var errorMessage by remember { mutableStateOf("") }
+
+    val coroutineScope = rememberCoroutineScope()
+    val loginViewModel = LoginViewModel(appDatabase)
+
 
     AppClubDeportivoTheme {
         Column(
@@ -98,10 +106,17 @@ fun LoginScreen(navController: NavController) {
                     onClick = {
                         if (password.isEmpty()) {
                             errorMessage = "Por favor, ingrese la contraseña."
-                        } else if (validateCredentials(username, password)) {
-                            navController.navigate("main_menu")
-                        } else {
-                            errorMessage = "Credenciales inválidas. Por favor, inténtelo de nuevo."
+                        }  else {
+                            coroutineScope.launch {
+                                loginViewModel.validateCredentials(username, password)
+                                    .collect { isValid ->
+                                        if (isValid) {
+                                            navController.navigate("main_menu")
+                                        } else {
+                                            errorMessage = "Credenciales inválidas. Por favor, inténtelo de nuevo."
+                                        }
+                                    }
+                            }
                         }
                     },
                     modifier = Modifier.fillMaxWidth(),
@@ -115,6 +130,4 @@ fun LoginScreen(navController: NavController) {
 }
 
 
-fun validateCredentials(username: String, password: String): Boolean {
-    return username == "user" && password == "password"
-}
+

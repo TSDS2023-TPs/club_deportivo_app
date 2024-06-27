@@ -1,3 +1,5 @@
+package com.example.appclubdeportivo.ui.theme
+
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -24,7 +26,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import java.util.*
 
 @Composable
 fun CustomTextField(
@@ -35,7 +36,7 @@ fun CustomTextField(
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     readOnly: Boolean = false,
-    onClick: @Composable (() -> Unit)? = null,
+    onClick: (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     shape: Shape = RoundedCornerShape(10.dp)
 ) {

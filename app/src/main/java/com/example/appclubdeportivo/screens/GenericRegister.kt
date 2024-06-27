@@ -1,7 +1,6 @@
 package com.example.appclubdeportivo.screens
 
-import CustomTextField
-import android.content.Context
+import com.example.appclubdeportivo.ui.theme.CustomTextField
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -17,7 +16,6 @@ import androidx.navigation.NavController
 import com.example.appclubdeportivo.R
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.SelectableButton
-import java.util.Calendar
 
 @Composable
 fun GenericRegisterScreen(navController: NavController, headerTitle: String, nextNavRoute: String) {

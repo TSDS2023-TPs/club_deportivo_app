@@ -8,11 +8,11 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.example.appclubdeportivo.view_entities.Customer
+import com.example.appclubdeportivo.view_entities.CustomerCard
 
 @Composable
 fun CustomerRow(
-    customer: Customer,
+    customer: CustomerCard,
     isChecked: Boolean,
     onCheckedChange: (Boolean) -> Unit
 ) {

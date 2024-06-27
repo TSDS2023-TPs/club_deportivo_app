@@ -4,6 +4,8 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import com.example.appclubdeportivo.data.AppDatabase
+import com.example.appclubdeportivo.data.UserDao
 import com.example.appclubdeportivo.screens.ActivityReportScreen
 import com.example.appclubdeportivo.screens.CustomerListScreen
 import com.example.appclubdeportivo.screens.CustomerRegisterDetailScreen
@@ -22,11 +24,12 @@ import com.example.appclubdeportivo.screens.ReportsScreen
 
 
 @Composable
-fun NavHandler(navController: NavHostController) {
+fun NavHandler(navController: NavHostController, appDatabase: AppDatabase) {
     NavHost(navController, startDestination = "login") {
-        composable("login") { LoginScreen(navController = navController) }
+
+        composable("login") { LoginScreen(navController = navController, appDatabase = appDatabase) }
         composable("main_menu") { MainMenuScreen(navController = navController) }
-        composable("customer_list") { CustomerListScreen(navController = navController) }
+        composable("customer_list") { CustomerListScreen(navController = navController, appDatabase = appDatabase) }
         composable("customer_register") { GenericRegisterScreen(navController = navController , headerTitle = "ABM Cliente", nextNavRoute = "customer_register_detail") }
         composable("customer_register_detail") { CustomerRegisterDetailScreen(navController =  navController) }
         composable("customer_unsubscribe") { CustomerUnsubscribeScreen(navController = navController) }

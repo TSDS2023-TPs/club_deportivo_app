@@ -11,18 +11,15 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.SelectableButton
-import com.example.appclubdeportivo.view_entities.Activity
-import com.example.appclubdeportivo.view_entities.Customer
+import com.example.appclubdeportivo.view_entities.CustomerCard
 
 @Composable
 fun CustomerUnsubscribeScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
     var selectedButton by remember { mutableStateOf("Baja") }
     var customers by remember { mutableStateOf(listOf(
-        Customer("1", "Pepito", activities = listOf(
-        Activity(1, "Natación")
-    ), expiredDate = "2024-12-31", amount= "2000"),
-        Customer("2", "Pepe", activities = listOf(Activity(1, "Funcional")), expiredDate = "2024-02-21", amount= "4000")
+        CustomerCard("1", "Pepito", expiredDate = "2024-12-31", amount= "2000"),
+        CustomerCard("2", "Pepe", expiredDate = "2024-02-21", amount= "4000")
     )
     )}
     var selectedCustomers by remember { mutableStateOf(setOf<String>()) }

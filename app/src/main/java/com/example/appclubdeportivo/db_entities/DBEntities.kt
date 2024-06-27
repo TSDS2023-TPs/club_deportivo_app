@@ -1,121 +1,140 @@
 package com.example.appclubdeportivo.db_entities
 
+import androidx.room.*
+import com.example.appclubdeportivo.view_entities.Activity
+
+@Entity
 data class Role(
-    val roleId: Int,
-    val roleDesc: String
+    @PrimaryKey(autoGenerate = true) val roleId: Int = 0,
+    val description: String
 )
 
+@Entity
 data class User(
-    val userId: Int,
-    val userName: String,
-    val userPass: String,
+    @PrimaryKey(autoGenerate = true) val userId: Int = 0,
+    val username: String,
+    val password: String,
     val roleId: Int,
-    val active: Boolean = true
+    val isActive: Boolean = true
 )
 
+@Entity
 data class DocumentType(
-    val documentTypeId: Int,
-    val documentTypeDesc: String
+    @PrimaryKey(autoGenerate = true) val documentTypeId: Int = 0,
+    val description: String
 )
 
+@Entity
 data class Person(
-    val personId: Int,
-    val identityDocument: String,
+    @PrimaryKey(autoGenerate = true) val personId: Int = 0,
+    val identityDocumentNumber: String,
     val documentTypeId: Int,
     val firstName: String,
     val lastName: String,
     val address: String,
     val birthDate: String,
     val gender: String,
-    val weight: Double
+    val weightKg: Double? = null
 )
 
+@Entity
 data class Employee(
-    val employeeId: Int,
+    @PrimaryKey(autoGenerate = true) val employeeId: Int = 0,
     val userId: Int,
     val personId: Int,
     val startHour: Int,
     val endHour: Int,
-    val daysOfWeek: Int,
+    val daysOfWeek: String,
     val hourlyRate: Int,
     val hireDate: String,
-    val terminationDate: String
+    val endDate: String?
 )
 
+@Entity
 data class Specialty(
-    val specialtyId: Int,
-    val specialtyDesc: String
+    @PrimaryKey(autoGenerate = true) val specialtyId: Int = 0,
+    val description: String
 )
 
+@Entity
 data class Professor(
-    val professorId: Int,
+    @PrimaryKey(autoGenerate = true) val professorId: Int = 0,
     val employeeId: Int,
     val specialtyId: Int,
-    val observation: String
+    val notes: String
 )
 
+@Entity
 data class Doctor(
-    val doctorId: Int,
+    @PrimaryKey(autoGenerate = true) val doctorId: Int = 0,
     val employeeId: Int,
     val specialtyId: Int,
-    val observation: String
+    val notes: String
 )
 
+@Entity
 data class AccountStatus(
-    val accountStatusId: Int,
-    val accountStatusDesc: String,
-    val accountStatusDetail: String
+    @PrimaryKey(autoGenerate = true) val accountStatusId: Int = 0,
+    val description: String,
+    val details: String
 )
 
+@Entity
 data class Activity(
-    val activityId: Int,
-    val activityType: String,
-    val day: String?,
-    val hour: Int?,
-    val teacherId: Int,
-    val classFee: Int
+    @PrimaryKey(autoGenerate = true) val activityId: Int = 0,
+    val type: String,
+    val dayOfWeek: String?,
+    val hourOfDay: Int?,
+    val employeeId: Int,
+    val classFee: Float
 )
 
+@Entity
 data class Customer(
-    val customerId: Int,
+    @PrimaryKey(autoGenerate = true) val customerId: Int = 0,
     val personId: Int,
     val membershipType: String,
-    val activityId: Int,
     val accountStatusId: Int,
-    val fit: Boolean,
+    val hasPhysicalCheck: Boolean,
     val startDate: String,
-    val endDate: String
+    val endDate: String? = null
 )
 
+@Entity
 data class Class(
-    val classId: Int,
+    @PrimaryKey(autoGenerate = true) val classId: Int = 0,
     val activityId: Int,
     val dateTime: String
 )
 
+@Entity(
+    primaryKeys = ["classId", "customerId"]
+)
 data class Attendance(
     val classId: Int,
     val customerId: Int
 )
 
+@Entity
 data class Routine(
-    val routineId: Int,
-    val customerId: Int,
-    val activityId: Int,
-    val day: String,
-    val detail: String,
-    val teacherId: Int,
-    val expirationDate: String
+    @PrimaryKey(autoGenerate = true) val routineId: Int = 0,
+    val customerActivityId: Int,
+    val dayOfWeek: String?,
+    val details: String,
+    val professorId: Int,
+    val expirationDate: String?
 )
 
+@Entity
 data class PaymentMethod(
-    val paymentMethodId: Int,
-    val paymentMethodDesc: String,
-    val appliesPromotion: Boolean
+    @PrimaryKey(autoGenerate = true) val paymentMethodId: Int = 0,
+    val description: String,
+    val hasPromotion: Boolean
 )
 
+@Entity
 data class Fee(
-    val feeId: Int,
+    @PrimaryKey(autoGenerate = true) val feeId: Int = 0,
     val customerId: Int,
     val amount: Int,
     val month: Int,
@@ -123,11 +142,18 @@ data class Fee(
     val status: String
 )
 
+@Entity
 data class Invoice(
-    val invoiceId: Int,
+    @PrimaryKey(autoGenerate = true) val invoiceId: Int = 0,
     val customerId: Int,
     val amount: Float,
     val date: String,
-    val feeId: Int?,
-    val paymentMethodId: Int?
+    val feeId: Int,
+    val paymentMethodId: Int
+)
+@Entity
+data class CustomerActivity(
+    @PrimaryKey(autoGenerate = true) val customerActivityId: Int = 0,
+    val customerId: Int,
+    val activityId: Int
 )
