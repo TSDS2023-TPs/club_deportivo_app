@@ -39,8 +39,8 @@ fun GenericCard(
     field4: PersonalizedText,
     field5: PersonalizedText,
     field6: PersonalizedText,
-    onEditClick: () -> Unit
-) {
+    onEditClick: () -> Unit,
+    gradientColor1: Color = Color(0xFF76ABAE)) {
     Card(
         shape = RoundedCornerShape(16.dp),
         modifier = Modifier
@@ -52,7 +52,7 @@ fun GenericCard(
                 .background(
                     brush = Brush.verticalGradient(
                         colors = listOf(
-                            Color(0xFF76ABAE),
+                            gradientColor1,
                             Color(0xFFEEEEEE),
                         )
                     )

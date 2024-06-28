@@ -15,7 +15,7 @@ import com.example.appclubdeportivo.ui.theme.SearchBar
 import com.example.appclubdeportivo.view_entities.Payment
 
 @Composable
-fun PaymentRegisterScreen(navController: NavController) {
+fun PaymentRegisterFeeScreen(navController: NavController) {
     var searchText by remember { mutableStateOf("") }
 
     AppClubDeportivoTheme {

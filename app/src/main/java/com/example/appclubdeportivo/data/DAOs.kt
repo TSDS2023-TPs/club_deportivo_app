@@ -163,9 +163,12 @@ interface ActivityDao {
 @Dao
 interface CustomerDao {
 
-    @Query("SELECT c.customerId as id, p.firstName ||  ' ' ||  p.lastName as name, f.dueDate as expiredDate, f.amount as amount FROM customer c " +
+    @Query("SELECT c.customerId as id, p.firstName ||  ' ' ||  p.lastName as name, f.dueDate as expiredDate, f.amount as amount," +
+            " c.membershipType " +
+            " FROM customer c " +
             "INNER JOIN person p ON c.personId = p.personId " +
-            "INNER JOIN fee f ON f.customerId = c.customerId")
+            "INNER JOIN fee f ON f.customerId = c.customerId" +
+            " WHERE c.accountStatusId = 1")
     fun getAllCustomers(): List<CustomerCard>
 
     @Insert
@@ -177,11 +180,13 @@ interface CustomerDao {
     @Delete
     fun deleteCustomer(customer: Customer): Int
 
-    @Query("SELECT c.customerId as id, p.firstName as name, f.dueDate as expiredDate, f.amount as amount " +
-            "FROM customer c " +
+    @Query("SELECT c.customerId as id" +
+            " FROM customer c " +
             "INNER JOIN person p ON c.personId = p.personId " +
-            "INNER JOIN fee f ON f.customerId = c.customerId WHERE p.personId = (SELECT personId FROM person WHERE identityDocumentNumber = :documentId)")
-    fun getCustomerByDocumentId(documentId: String): CustomerCard
+            "WHERE p.personId = (SELECT personId FROM person WHERE identityDocumentNumber = :documentId)")
+    fun getCustomerIdByDocumentId(documentId: String): Int
+    @Query("UPDATE customer SET accountStatusId = 0 WHERE customerId IN (:customerIds)")
+    fun logicalDeleteCustomers(customerIds: List<String>)
 }
 
 @Dao

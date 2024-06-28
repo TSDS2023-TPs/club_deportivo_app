@@ -3,26 +3,35 @@ package com.example.appclubdeportivo.screens
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.appclubdeportivo.data.AppDatabase
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.SelectableButton
 import com.example.appclubdeportivo.view_entities.CustomerCard
+import com.example.appclubdeportivo.view_models.CustomerViewModel
 
 @Composable
-fun CustomerUnsubscribeScreen(navController: NavController) {
+fun CustomerUnsubscribeScreen(navController: NavController, appDatabase: AppDatabase) {
     var searchText by remember { mutableStateOf("") }
     var selectedButton by remember { mutableStateOf("Baja") }
-    var customers by remember { mutableStateOf(listOf(
-        CustomerCard("1", "Pepito", expiredDate = "2024-12-31", amount= "2000"),
-        CustomerCard("2", "Pepe", expiredDate = "2024-02-21", amount= "4000")
-    )
-    )}
+    val customerViewModel: CustomerViewModel = viewModel { CustomerViewModel(appDatabase) }
+
+    val customers by customerViewModel.customers.observeAsState(initial = emptyList())
     var selectedCustomers by remember { mutableStateOf(setOf<String>()) }
+
+    val filteredCustomers = customers.filter { customer: CustomerCard ->
+        customer.id.contains(searchText, ignoreCase = true) ||
+                customer.name.contains(searchText, ignoreCase = true)
+    }
 
     AppClubDeportivoTheme {
         Box(
@@ -46,7 +55,9 @@ fun CustomerUnsubscribeScreen(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
-                    com.example.appclubdeportivo.ui.theme.SearchBar(searchText) { searchText = it }
+                    com.example.appclubdeportivo.ui.theme.SearchBar(
+                        searchText
+                    ) { searchText = it }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -70,25 +81,27 @@ fun CustomerUnsubscribeScreen(navController: NavController) {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-                    customers.forEach { customer ->
-                        CustomerRow(
-                            customer = customer,
-                            isChecked = selectedCustomers.contains(customer.id),
-                            onCheckedChange = { isChecked ->
-                                selectedCustomers = if (isChecked) {
-                                    selectedCustomers + customer.id
-                                } else {
-                                    selectedCustomers - customer.id
+                    LazyColumn {
+                        items(filteredCustomers) { customer ->
+                            CustomerRow(
+                                customer = customer,
+                                isChecked = selectedCustomers.contains(customer.id),
+                                onCheckedChange = { isChecked ->
+                                    selectedCustomers = if (isChecked) {
+                                        selectedCustomers + customer.id
+                                    } else {
+                                        selectedCustomers - customer.id
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
 
                     Spacer(modifier = Modifier.height(24.dp))
 
                     Button(
                         onClick = {
-                            customers = customers.filterNot { selectedCustomers.contains(it.id) }
+                            customerViewModel.logicalDeleteCustomers(selectedCustomers.toList())
                             selectedCustomers = emptySet()
                         },
                         modifier = Modifier.fillMaxWidth()

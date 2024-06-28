@@ -55,7 +55,15 @@ fun MainMenuScreen(navController: NavController) {
                         contentPadding = PaddingValues(vertical = 20.dp),
                         modifier = Modifier.fillMaxWidth()
                     ) {
-                        Text("Registrar Pago")
+                        Text("Registrar Pago Socio")
+                    }
+                    Spacer(modifier = Modifier.height(16.dp))
+                    Button(
+                        onClick = { navController.navigate("payment_daily") },
+                        contentPadding = PaddingValues(vertical = 20.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Registrar Pago No Socio")
                     }
 
                     Spacer(modifier = Modifier.height(16.dp))

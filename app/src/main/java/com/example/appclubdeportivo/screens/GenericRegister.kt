@@ -1,30 +1,53 @@
 package com.example.appclubdeportivo.screens
 
-import com.example.appclubdeportivo.ui.theme.CustomTextField
+import android.app.DatePickerDialog
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.R
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
+import com.example.appclubdeportivo.ui.theme.CustomTextField
 import com.example.appclubdeportivo.ui.theme.SelectableButton
+import com.example.appclubdeportivo.view_models.PersonViewModel
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.*
 
+@OptIn(ExperimentalMaterial3Api::class)
+@RequiresApi(Build.VERSION_CODES.O)
 @Composable
-fun GenericRegisterScreen(navController: NavController, headerTitle: String, nextNavRoute: String) {
+fun GenericRegisterScreen(
+    navController: NavController,
+    headerTitle: String,
+    nextNavRoute: String,
+    personViewModel: PersonViewModel
+) {
     var selectedButton by remember { mutableStateOf("Alta") }
-    var name by remember { mutableStateOf("") }
-    var id by remember { mutableStateOf("") }
-    var bornDate by remember { mutableStateOf("") }
-    var telephone by remember { mutableStateOf("") }
 
+    val documentTypes by personViewModel.documentTypes.observeAsState(initial = emptyList())
+    var isDocumentTypeExpanded by remember { mutableStateOf(false) }
+
+    val context = LocalContext.current
+
+    val name by personViewModel.name.collectAsState()
+    val id by personViewModel.id.collectAsState()
+    val selectedDocumentType by personViewModel.selectedDocumentType.collectAsState()
+    val bornDate by personViewModel.bornDate.collectAsState()
+    val telephone by personViewModel.telephone.collectAsState()
 
     AppClubDeportivoTheme {
         Box(
@@ -72,30 +95,89 @@ fun GenericRegisterScreen(navController: NavController, headerTitle: String, nex
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
                         value = name,
-                        onValueChange = { name = it },
+                        onValueChange = { personViewModel.updateName(it) },
                         placeholder = "Nombre y Apellido",
                         leadingIcon = painterResource(id = R.drawable.person_24px)
                     )
                     Spacer(modifier = Modifier.height(8.dp))
+
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        ExposedDropdownMenuBox(
+                            expanded = isDocumentTypeExpanded,
+                            onExpandedChange = { isDocumentTypeExpanded = !isDocumentTypeExpanded }
+                        ) {
+                            TextField(
+                                value = selectedDocumentType?.description ?: "Seleccione tipo de documento",
+                                onValueChange = {},
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .menuAnchor(),
+                                readOnly = true,
+                                placeholder = {
+                                    Text("Seleccione tipo de documento")
+                                },
+                                trailingIcon = {
+                                    ExposedDropdownMenuDefaults.TrailingIcon(
+                                        expanded = isDocumentTypeExpanded
+                                    )
+                                },
+                                colors = ExposedDropdownMenuDefaults.textFieldColors()
+                            )
+                            ExposedDropdownMenu(
+                                expanded = isDocumentTypeExpanded,
+                                onDismissRequest = { isDocumentTypeExpanded = false },
+                                        modifier = Modifier
+                                        .fillMaxWidth()
+                                    .background(if (isDocumentTypeExpanded) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.background)
+
+                            ) {
+                                documentTypes.forEach { documentType ->
+                                    DropdownMenuItem(
+                                        text = { Text(documentType.description) },
+                                        onClick = {
+                                            personViewModel.updateSelectedDocumentType(documentType)
+                                            isDocumentTypeExpanded = false
+                                        }
+                                    )
+                                }
+                            }
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
                         value = id,
-                        onValueChange = { id = it },
+                        onValueChange = { personViewModel.updateId(it) },
                         placeholder = "N° de Documento",
-                        leadingIcon = painterResource(id = R.drawable.id_card_24px)
+                        leadingIcon = painterResource(id = R.drawable.id_card_24px),
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
                         value = bornDate,
-                        onValueChange = { bornDate = it },
+                        onValueChange = { personViewModel.updateBornDate(it) },
                         placeholder = "Fecha Nacimiento",
                         leadingIcon = painterResource(id = R.drawable.calendar_today_24px),
-                        readOnly = true,
-                        onClick = {  }
+                        onClick = {
+                            val calendar = Calendar.getInstance()
+                            val datePickerDialog = DatePickerDialog(
+                                context,
+                                { _, year, month, dayOfMonth ->
+                                    val selectedDate = LocalDate.of(year, month + 1, dayOfMonth)
+                                    personViewModel.updateBornDate(selectedDate.format(DateTimeFormatter.ISO_LOCAL_DATE))
+                                },
+                                calendar.get(Calendar.YEAR),
+                                calendar.get(Calendar.MONTH),
+                                calendar.get(Calendar.DAY_OF_MONTH)
+                            )
+                            datePickerDialog.show()
+                        }
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
                         value = telephone,
-                        onValueChange = { telephone = it },
+                        onValueChange = { personViewModel.updateTelephone(it) },
                         placeholder = "Teléfono",
                         leadingIcon = painterResource(id = R.drawable.telephone),
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
@@ -120,10 +202,8 @@ fun GenericRegisterScreen(navController: NavController, headerTitle: String, nex
                             navController.navigate("login")
                         }
                     )
-
+                }
             }
         }
     }
-}
-
 }

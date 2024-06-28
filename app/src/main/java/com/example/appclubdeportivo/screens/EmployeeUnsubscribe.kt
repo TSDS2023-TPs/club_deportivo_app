@@ -45,7 +45,9 @@ fun EmployeeUnsubscribeScreen(navController: NavController) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
-                    com.example.appclubdeportivo.ui.theme.SearchBar(searchText) { searchText = it }
+                    com.example.appclubdeportivo.ui.theme.SearchBar(
+                        searchText
+                    ) { searchText = it }
 
                     Spacer(modifier = Modifier.height(16.dp))
 

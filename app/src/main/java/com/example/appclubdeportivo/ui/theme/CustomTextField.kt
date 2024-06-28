@@ -32,7 +32,7 @@ fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
-    leadingIcon: Painter,
+    leadingIcon: Painter? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     visualTransformation: VisualTransformation = VisualTransformation.None,
     readOnly: Boolean = false,
@@ -58,12 +58,14 @@ fun CustomTextField(
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                painter = leadingIcon,
-                contentDescription = null,
-                tint = Color.Gray,
-                modifier = Modifier.size(24.dp)
-            )
+            if (leadingIcon != null) {
+                Icon(
+                    painter = leadingIcon,
+                    contentDescription = null,
+                    tint = Color.Gray,
+                    modifier = Modifier.size(24.dp)
+                )
+            }
             if (readOnly) {
                 Text(
                     text = value.takeIf { it.isNotEmpty() } ?: placeholder,

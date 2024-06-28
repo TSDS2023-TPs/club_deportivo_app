@@ -12,8 +12,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.data.AppDatabase
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
@@ -22,7 +20,6 @@ import com.example.appclubdeportivo.ui.theme.PersonalizedText
 import com.example.appclubdeportivo.ui.theme.SelectableButton
 import com.example.appclubdeportivo.view_models.CustomerViewModel
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -33,6 +30,10 @@ fun CustomerListScreen(navController: NavController, appDatabase: AppDatabase) {
 
     val customerViewModel = CustomerViewModel(appDatabase)
     val customers by customerViewModel.customers.observeAsState(initial = emptyList())
+
+    val filteredCustomers = customers.filter { customer ->
+        customer.id.contains(searchText)
+    }
 
     AppClubDeportivoTheme {
         Box(
@@ -56,7 +57,7 @@ fun CustomerListScreen(navController: NavController, appDatabase: AppDatabase) {
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.Top
                 ) {
-                    com.example.appclubdeportivo.ui.theme.SearchBar(searchText) { searchText = "Buscar por Documento" }
+                    com.example.appclubdeportivo.ui.theme.SearchBar(searchText = "Buscar por Id", onSearchTextChange = { searchText = it })
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -79,17 +80,18 @@ fun CustomerListScreen(navController: NavController, appDatabase: AppDatabase) {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     LazyColumn {
-                        items(customers) { customer ->
+                        items(filteredCustomers) { customer ->
                             GenericCard(
                                 field1 = PersonalizedText("N° ${customer.id}"),
                                 field2 = PersonalizedText(customer.name),
                                 field3 = PersonalizedText(
                                     text = customer.expiredDate,
-                                    backgroundColor = if (isDateExpired(customer.expiredDate)) Color.Red else Color.Green
+                                    backgroundColor = if (isDateExpired(customer.expiredDate)) Color(0xFFF94F4F).copy(alpha = 0.7f) else  Color(0xFF3E8349).copy(alpha = 0.7f)
                                 ),
                                 field4 = PersonalizedText("$${customer.amount}"),
                                 field5 = PersonalizedText("Vencimiento Cuota"),
                                 field6 = PersonalizedText("Monto"),
+                                gradientColor1 = if (customer.membershipType == "No Socio") Color(0xFFF4BB85).copy(alpha = 0.7f) else Color(0xFF76ABAE).copy(alpha = 0.7f),
                                 onEditClick = { /* Implement edit functionality */ }
                             )
                             Spacer(modifier = Modifier.height(8.dp))

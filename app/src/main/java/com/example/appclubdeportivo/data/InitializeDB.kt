@@ -63,20 +63,20 @@ fun insertInitialPersons(database: AppDatabase) {
     val personDao = database.personDao()
 
     val initialPersons = listOf(
-        Person(identityDocumentNumber = "123145", documentTypeId = 1, firstName = "Pepe", lastName = "Pepin", address = "Avenida Demo 123",
-       birthDate = "1970-03-12", gender = "M"),
-        Person(identityDocumentNumber = "1234", documentTypeId = 1, firstName = "Demo", lastName = "Ejemplo", address = "Demo 123",
-            birthDate = "1980-04-12", gender = "F"),
-        Person(identityDocumentNumber = "56789", documentTypeId = 1, firstName = "Juan", lastName = "Perez", address = "Demo 456",
-            birthDate = "1990-01-01", gender = "M"),
-        Person(identityDocumentNumber = "98765", documentTypeId = 2, firstName = "Marta", lastName = "Lopez", address = "Demo 789",
-            birthDate = "1985-05-05", gender = "F"),
-        Person(identityDocumentNumber = "11223", documentTypeId = 3, firstName = "Carlos", lastName = "Gomez", address = "Demo 101",
-            birthDate = "1975-10-10", gender = "M"),
-        Person(identityDocumentNumber = "121213", documentTypeId = 1, firstName = "Matias", lastName = "Jerez", address = "Demo 888",
-            birthDate = "1985-05-06", gender = "M"),
-        Person(identityDocumentNumber = "112111", documentTypeId = 4, firstName = "Mateo", lastName = "Valenzuela", address = "Avenida Demo 101",
-            birthDate = "1999-10-10", gender = "M")
+        Person(identityDocumentNumber = "123145", documentTypeId = 1, firstName = "Pepe", lastName = "Pepin",
+       birthDate = "1970-03-12", gender = "M", telephone = "11111"),
+        Person(identityDocumentNumber = "1234", documentTypeId = 1, firstName = "Demo", lastName = "Ejemplo",
+            birthDate = "1980-04-12", gender = "F", telephone = "11111"),
+        Person(identityDocumentNumber = "56789", documentTypeId = 1, firstName = "Juan", lastName = "Perez",
+            birthDate = "1990-01-01", gender = "M", telephone = "11111"),
+        Person(identityDocumentNumber = "98765", documentTypeId = 2, firstName = "Marta", lastName = "Lopez",
+            birthDate = "1985-05-05", gender = "F", telephone = "11111"),
+        Person(identityDocumentNumber = "11223", documentTypeId = 3, firstName = "Carlos", lastName = "Gomez",
+            birthDate = "1975-10-10", gender = "M", telephone = "11111"),
+        Person(identityDocumentNumber = "121213", documentTypeId = 1, firstName = "Matias", lastName = "Jerez",
+            birthDate = "1985-05-06", gender = "M", telephone = "11111"),
+        Person(identityDocumentNumber = "112111", documentTypeId = 4, firstName = "Mateo", lastName = "Valenzuela",
+            birthDate = "1999-10-10", gender = "M", telephone = "11111")
     )
 
     initialPersons.forEach { person ->

@@ -31,10 +31,11 @@ data class Person(
     val documentTypeId: Int,
     val firstName: String,
     val lastName: String,
-    val address: String,
+    val telephone: String,
     val birthDate: String,
     val gender: String,
-    val weightKg: Double? = null
+    val weightKg: Float? = null,
+    val heightCm: Float? = null
 )
 
 @Entity
@@ -92,9 +93,9 @@ data class Activity(
 @Entity
 data class Customer(
     @PrimaryKey(autoGenerate = true) val customerId: Int = 0,
-    val personId: Int,
+    var personId: Int,
     val membershipType: String,
-    val accountStatusId: Int,
+    val accountStatusId: Int? = 1,
     val hasPhysicalCheck: Boolean,
     val startDate: String,
     val endDate: String? = null
