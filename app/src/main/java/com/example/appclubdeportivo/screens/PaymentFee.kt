@@ -17,12 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.core.content.FileProvider
 
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.data.AppDatabase
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.SearchBar
 import com.example.appclubdeportivo.view_models.PaymentViewModel
+import java.io.File
 
 @Composable
 fun PaymentRegisterFeeScreen(navController: NavController, appDatabase: AppDatabase) {
@@ -156,3 +158,4 @@ fun openPDF(context: Context, uri: Uri) {
     intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
     context.startActivity(intent)
 }
+

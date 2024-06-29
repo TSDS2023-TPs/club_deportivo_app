@@ -1,6 +1,7 @@
 package com.example.appclubdeportivo.ui.theme
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,6 +40,7 @@ fun GenericCard(
     field4: PersonalizedText,
     field5: PersonalizedText,
     field6: PersonalizedText,
+    onClick: () -> Unit,
     onEditClick: () -> Unit,
     gradientColor1: Color = Color(0xFF76ABAE)) {
     Card(
@@ -46,6 +48,7 @@ fun GenericCard(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable { onClick() }
     ) {
         Box(
             modifier = Modifier
@@ -111,7 +114,7 @@ fun GenericCard(
                         color = field4.color,
                         modifier = Modifier
                             .background(
-                                color = Color.White,
+                                color = field4.backgroundColor ?: Color.Transparent,
                                 shape = RoundedCornerShape(4.dp)
                             )
                             .padding(horizontal = 8.dp, vertical = 4.dp)

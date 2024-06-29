@@ -4,6 +4,7 @@ import androidx.room.*
 import com.example.appclubdeportivo.db_entities.*
 import com.example.appclubdeportivo.view_entities.CustomerCard
 import com.example.appclubdeportivo.view_entities.Payment
+import com.example.appclubdeportivo.view_entities.CustomerPerson
 
 @Dao
 interface RoleDao {
@@ -54,6 +55,9 @@ interface DocumentTypeDao {
 
     @Delete
     fun deleteDocumentType(documentType: DocumentType): Int
+
+    @Query("SELECT * FROM documenttype WHERE documentTypeId = :documentTypeId")
+    fun getDocumentTypeById(documentTypeId: Int): DocumentType
 }
 
 @Dao
@@ -61,6 +65,8 @@ interface PersonDao {
     @Query("SELECT * FROM person")
     fun getAllPersons(): List<Person>
 
+    @Query("SELECT * FROM person WHERE personId = :personId")
+    fun getPersonById(personId: Int): Person
     @Insert
     fun insertPerson(person: Person): Long
 
@@ -165,13 +171,20 @@ interface ActivityDao {
 interface CustomerDao {
 
     @Query("SELECT c.customerId as id, p.firstName ||  ' ' ||  p.lastName as name, f.dueDate as expiredDate, f.amount as amount," +
-            " c.membershipType " +
+            " c.membershipType, f.status as feeStatus " +
             " FROM customer c " +
             "INNER JOIN person p ON c.personId = p.personId " +
             "INNER JOIN fee f ON f.customerId = c.customerId" +
             " WHERE c.accountStatusId = 1")
     fun getAllCustomers(): List<CustomerCard>
 
+    @Query("SELECT c.customerId as id, p.firstName ||  ' ' ||  p.lastName as name, f.dueDate as expiredDate, f.amount as amount," +
+            " c.membershipType, f.status as feeStatus " +
+            " FROM customer c " +
+            "INNER JOIN person p ON c.personId = p.personId " +
+            "INNER JOIN fee f ON f.customerId = c.customerId" +
+            " WHERE c.accountStatusId = 1 and f.status = 'Pendiente'")
+    fun getCustomersWithUnpaidFees(): List<CustomerCard>
     @Insert
     fun insertCustomer(customer: Customer): Long
 
@@ -186,6 +199,18 @@ interface CustomerDao {
             "INNER JOIN person p ON c.personId = p.personId " +
             "WHERE p.personId = (SELECT personId FROM person WHERE identityDocumentNumber = :documentId)")
     fun getCustomerIdByDocumentId(documentId: String): Int
+
+    @Query("SELECT c.customerId, p.personId, p.firstName , p.lastName, p.documentTypeId as documentType, p.identityDocumentNumber as documentId," +
+            "p.birthDate, p.telephone, p.gender, p.heightCm as height, p.weightKg as weight, c.hasPhysicalCheck as physicalCheck, c.membershipType" +
+            " FROM customer c " +
+            "INNER JOIN person p ON c.personId = p.personId " +
+            " WHERE c.accountStatusId = 1 and c.customerId = :customerId")
+    fun getCustomerPersonById(customerId: Int): CustomerPerson
+
+    @Query("SELECT *" +
+            " FROM customer c " +
+            " WHERE c.accountStatusId = 1 and c.customerId = :customerId")
+    fun getCustomerById(customerId: Int): Customer
     @Query("UPDATE customer SET accountStatusId = 0 WHERE customerId IN (:customerIds)")
     fun logicalDeleteCustomers(customerIds: List<String>)
 }

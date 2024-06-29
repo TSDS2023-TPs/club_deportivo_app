@@ -15,6 +15,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.room.PrimaryKey
 import com.example.appclubdeportivo.data.AppDatabase
 import com.example.appclubdeportivo.data.CustomerDao
+import com.example.appclubdeportivo.data.DocumentTypeDao
 import com.example.appclubdeportivo.data.FeeDao
 import com.example.appclubdeportivo.data.PersonDao
 import com.example.appclubdeportivo.db_entities.Customer
@@ -22,6 +23,7 @@ import com.example.appclubdeportivo.db_entities.DocumentType
 import com.example.appclubdeportivo.db_entities.Fee
 import com.example.appclubdeportivo.db_entities.Person
 import com.example.appclubdeportivo.view_entities.CustomerCard
+import com.example.appclubdeportivo.view_entities.CustomerPerson
 import com.itextpdf.kernel.colors.DeviceRgb
 import com.itextpdf.kernel.pdf.PdfDocument
 import com.itextpdf.kernel.pdf.PdfWriter
@@ -29,7 +31,11 @@ import com.itextpdf.layout.Document
 import com.itextpdf.layout.element.Paragraph
 import com.itextpdf.layout.property.TextAlignment
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.FileOutputStream
@@ -42,9 +48,13 @@ class CustomerViewModel(private val appDatabase: AppDatabase) : ViewModel() {
     private val customerDao: CustomerDao = appDatabase.customerDao()
     private val personDao: PersonDao = appDatabase.personDao()
     private val feeDao: FeeDao = appDatabase.feeDao()
-
+    private val documentTypeDao: DocumentTypeDao = appDatabase.documentTypeDao()
     private val _customers = MutableLiveData<List<CustomerCard>>()
     val customers: LiveData<List<CustomerCard>> = _customers
+
+    private val _selectedCustomer = MutableLiveData<CustomerPerson?>()
+    val selectedCustomer: LiveData<CustomerPerson?> = _selectedCustomer
+
     init {
         loadCustomers()
     }
@@ -59,7 +69,24 @@ class CustomerViewModel(private val appDatabase: AppDatabase) : ViewModel() {
             customerDao.getAllCustomers()
         }
     }
+    fun selectCustomer(customer: CustomerPerson) {
+        _selectedCustomer.value = customer
+    }
+    fun getCustomerIdByDocumentId(documentId: String): Int {
+        return runBlocking {
+            withContext(Dispatchers.IO) {
+                customerDao.getCustomerIdByDocumentId(documentId)
+            }
+        }
+    }
 
+
+    fun getCustomerPersonById(customerId: Int): LiveData<CustomerPerson> = liveData {
+        val customer = withContext(Dispatchers.IO) {
+            customerDao.getCustomerPersonById(customerId)
+        }
+        emit(customer)
+    }
     @RequiresApi(Build.VERSION_CODES.O)
     fun insertCustomer(person: Person, customer: Customer) {
 
@@ -76,11 +103,14 @@ class CustomerViewModel(private val appDatabase: AppDatabase) : ViewModel() {
         }
     }
 
-    fun updateCustomer(customer: Customer): LiveData<Int> = liveData {
-        val result = withContext(Dispatchers.IO) {
-            customerDao.updateCustomer(customer)
+    fun updateCustomer(customer: Customer, person: Person) {
+        viewModelScope.launch {
+            withContext(Dispatchers.IO) {
+                personDao.updatePerson(person)
+                customerDao.updateCustomer(customer)
+                _customers.postValue(getAllCustomersFromDB())
+            }
         }
-        emit(result)
     }
 
     fun logicalDeleteCustomers(customerIds: List<String>) {
@@ -116,13 +146,12 @@ class CustomerViewModel(private val appDatabase: AppDatabase) : ViewModel() {
     }
 
     fun generateMembershipCard(context: Context, customer: Customer, person: Person): File {
-        val file = File(context.getExternalFilesDir(null), "membership_card.pdf")
+        val file = File(context.getExternalFilesDir(null), "membership_card_${person.identityDocumentNumber}.pdf")
         val writer = PdfWriter(FileOutputStream(file))
         val pdf = PdfDocument(writer)
         val document = Document(pdf)
 
         val gradientColor1 = DeviceRgb(118, 171, 174)
-        val backgroundColor = DeviceRgb(238, 238, 238)
         document.add(
             Paragraph("Carnet de Socio")
                 .setFontSize(24f)

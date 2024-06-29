@@ -3,7 +3,6 @@ package com.example.appclubdeportivo.data
 
 import com.example.appclubdeportivo.db_entities.*
 import java.text.SimpleDateFormat
-import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
@@ -63,19 +62,26 @@ fun insertInitialPersons(database: AppDatabase) {
     val personDao = database.personDao()
 
     val initialPersons = listOf(
-        Person(identityDocumentNumber = "123145", documentTypeId = 1, firstName = "Pepe", lastName = "Pepin",
+        Person(
+            identityDocumentNumber = "123145", documentTypeId = 1, firstName = "Pepe", lastName = "Pepin",
        birthDate = "1970-03-12", gender = "M", telephone = "11111"),
-        Person(identityDocumentNumber = "1234", documentTypeId = 1, firstName = "Demo", lastName = "Ejemplo",
+        Person(
+            identityDocumentNumber = "1234", documentTypeId = 1, firstName = "Demo", lastName = "Ejemplo",
             birthDate = "1980-04-12", gender = "F", telephone = "11111"),
-        Person(identityDocumentNumber = "56789", documentTypeId = 1, firstName = "Juan", lastName = "Perez",
+        Person(
+            identityDocumentNumber = "56789", documentTypeId = 1, firstName = "Juan", lastName = "Perez",
             birthDate = "1990-01-01", gender = "M", telephone = "11111"),
-        Person(identityDocumentNumber = "98765", documentTypeId = 2, firstName = "Marta", lastName = "Lopez",
+        Person(
+            identityDocumentNumber = "98765", documentTypeId = 2, firstName = "Marta", lastName = "Lopez",
             birthDate = "1985-05-05", gender = "F", telephone = "11111"),
-        Person(identityDocumentNumber = "11223", documentTypeId = 3, firstName = "Carlos", lastName = "Gomez",
+        Person(
+            identityDocumentNumber = "11223", documentTypeId = 3, firstName = "Carlos", lastName = "Gomez",
             birthDate = "1975-10-10", gender = "M", telephone = "11111"),
-        Person(identityDocumentNumber = "121213", documentTypeId = 1, firstName = "Matias", lastName = "Jerez",
+        Person(
+            identityDocumentNumber = "121213", documentTypeId = 1, firstName = "Matias", lastName = "Jerez",
             birthDate = "1985-05-06", gender = "M", telephone = "11111"),
-        Person(identityDocumentNumber = "112111", documentTypeId = 4, firstName = "Mateo", lastName = "Valenzuela",
+        Person(
+            identityDocumentNumber = "112111", documentTypeId = 4, firstName = "Mateo", lastName = "Valenzuela",
             birthDate = "1999-10-10", gender = "M", telephone = "11111")
     )
 
@@ -234,6 +240,8 @@ fun insertInitialFees(database: AppDatabase) {
 
     val initialFees = listOf(
         Fee(customerId = 1, amount = 50, monthYear = 202401, dueDate = "2024-02-01", status = "Pendiente"),
+        Fee(customerId = 1, amount = 50, monthYear = 202402, dueDate = "2024-03-01", status = "Pendiente"),
+        Fee(customerId = 1, amount = 50, monthYear = 202403, dueDate = "2024-04-01", status = "Pendiente"),
         Fee(customerId = 2, amount = 40, monthYear = 202411, dueDate = "2024-12-01", status = "Pago")
     )
 

@@ -79,7 +79,8 @@ fun EmployeeListScreen(navController: NavController) {
                             field4 = PersonalizedText(employee.salary.toString(), backgroundColor = Color.White),
                             field5 = PersonalizedText("Especialidad"),
                             field6 = PersonalizedText("Valor Hora"),
-                            onEditClick = { /* a implementar */ }
+                            onEditClick = { /* a implementar */ },
+                            onClick = { /* a implementar */ }
                         )
                         Spacer(modifier = Modifier.height(16.dp))
                     }

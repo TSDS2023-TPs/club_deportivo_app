@@ -1,7 +1,6 @@
 package com.example.appclubdeportivo.db_entities
 
 import androidx.room.*
-import com.example.appclubdeportivo.view_entities.Activity
 
 @Entity
 data class Role(

@@ -84,15 +84,16 @@ fun CustomerListScreen(navController: NavController, appDatabase: AppDatabase) {
                             GenericCard(
                                 field1 = PersonalizedText("N° ${customer.id}"),
                                 field2 = PersonalizedText(customer.name),
-                                field3 = PersonalizedText(
+                                field3 = if (customer.membershipType == "No Socio") PersonalizedText("", backgroundColor = Color(0xFF76ABAE).copy(alpha = 0.7f))  else PersonalizedText(
                                     text = customer.expiredDate,
-                                    backgroundColor = if (isDateExpired(customer.expiredDate)) Color(0xFFF94F4F).copy(alpha = 0.7f) else  Color(0xFF3E8349).copy(alpha = 0.7f)
+                                    backgroundColor = if (isDateExpired(customer.expiredDate) && customer.feeStatus == "Pendiente") Color(0xFFF94F4F).copy(alpha = 0.7f) else  Color(0xFF3E8349).copy(alpha = 0.7f)
                                 ),
-                                field4 = PersonalizedText("$${customer.amount}"),
-                                field5 = PersonalizedText("Vencimiento Cuota"),
-                                field6 = PersonalizedText("Monto"),
+                                field4 = if (customer.membershipType == "No Socio") PersonalizedText("", backgroundColor = Color(0xFFF4BB85).copy(alpha = 0.7f)) else PersonalizedText("$${customer.amount}"),
+                                field5 = if (customer.membershipType == "No Socio") PersonalizedText("", backgroundColor = Color(0xFFF4BB85).copy(alpha = 0.7f)) else PersonalizedText("Vencimiento Cuota"),
+                                field6 = if (customer.membershipType == "No Socio") PersonalizedText("", backgroundColor = Color(0xFFF4BB85).copy(alpha = 0.7f)) else PersonalizedText("Monto"),
                                 gradientColor1 = if (customer.membershipType == "No Socio") Color(0xFFF4BB85).copy(alpha = 0.7f) else Color(0xFF76ABAE).copy(alpha = 0.7f),
-                                onEditClick = { /* Implement edit functionality */ }
+                                onClick = { navController.navigate("customer_edit/${customer.id}") },
+                                onEditClick = { }
                             )
                             Spacer(modifier = Modifier.height(8.dp))
                         }

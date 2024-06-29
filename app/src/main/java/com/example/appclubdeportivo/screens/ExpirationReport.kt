@@ -20,10 +20,11 @@ fun ExpirationReportScreen(navController: NavController, appDatabase: AppDatabas
 
     LaunchedEffect(Unit) {
         val customers = withContext(Dispatchers.IO) {
-            appDatabase.customerDao().getAllCustomers().filter {
+            appDatabase.customerDao().getCustomersWithUnpaidFees().filter {
                 it.expiredDate.let { date ->
                     SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date)?.before(Date()) == true
-                }
+
+            }
             }
         }
         expiredCustomers.value = customers

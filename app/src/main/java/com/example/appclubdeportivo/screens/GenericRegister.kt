@@ -12,16 +12,18 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.appclubdeportivo.R
+import com.example.appclubdeportivo.data.AppDatabase
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.CustomTextField
 import com.example.appclubdeportivo.ui.theme.SelectableButton
+import com.example.appclubdeportivo.view_models.CustomerViewModel
 import com.example.appclubdeportivo.view_models.PersonViewModel
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -34,20 +36,44 @@ fun GenericRegisterScreen(
     navController: NavController,
     headerTitle: String,
     nextNavRoute: String,
-    personViewModel: PersonViewModel
+    personViewModel: PersonViewModel,
+    isEditing: Boolean = false,
+    appDatabase: AppDatabase,
+    customerId: Int? = null
 ) {
     var selectedButton by remember { mutableStateOf("Alta") }
 
     val documentTypes by personViewModel.documentTypes.observeAsState(initial = emptyList())
     var isDocumentTypeExpanded by remember { mutableStateOf(false) }
+    val customerViewModel: CustomerViewModel = viewModel { CustomerViewModel(appDatabase) }
 
     val context = LocalContext.current
 
     val name by personViewModel.name.collectAsState()
-    val id by personViewModel.id.collectAsState()
+    val documentId by personViewModel.documentId.collectAsState()
     val selectedDocumentType by personViewModel.selectedDocumentType.collectAsState()
     val bornDate by personViewModel.bornDate.collectAsState()
     val telephone by personViewModel.telephone.collectAsState()
+
+    LaunchedEffect(customerId) {
+        if (isEditing && customerId != null) {
+            customerViewModel.getCustomerPersonById(customerId).observeForever { customer ->
+                customer?.let {
+                    personViewModel.updateName("${it.firstName} ${it.lastName}")
+                    personViewModel.updateId(it.personId)
+                    personViewModel.updateDocumentId(it.documentId)
+                    personViewModel.updateTelephone(it.telephone)
+                    personViewModel.updateBornDate(it.birthDate)
+                    personViewModel.updateTelephone(it.telephone)
+                    personViewModel.updateGender(it.gender)
+                    personViewModel.updateWeight(it.weight.toString())
+                    personViewModel.updateHeight(it.height.toString())
+                    val documentType = documentTypes.firstOrNull { dt -> dt.documentTypeId == it.documentType }
+                    personViewModel.updateSelectedDocumentType(documentType)
+                }
+            }
+        }
+    }
 
     AppClubDeportivoTheme {
         Box(
@@ -126,10 +152,9 @@ fun GenericRegisterScreen(
                             ExposedDropdownMenu(
                                 expanded = isDocumentTypeExpanded,
                                 onDismissRequest = { isDocumentTypeExpanded = false },
-                                        modifier = Modifier
-                                        .fillMaxWidth()
+                                modifier = Modifier
+                                    .fillMaxWidth()
                                     .background(if (isDocumentTypeExpanded) MaterialTheme.colorScheme.background else MaterialTheme.colorScheme.background)
-
                             ) {
                                 documentTypes.forEach { documentType ->
                                     DropdownMenuItem(
@@ -143,15 +168,14 @@ fun GenericRegisterScreen(
                             }
                         }
                     }
-
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
-                        value = id,
-                        onValueChange = { personViewModel.updateId(it) },
+                        value = documentId,
+                        onValueChange = { personViewModel.updateDocumentId(it) },
                         placeholder = "N° de Documento",
                         leadingIcon = painterResource(id = R.drawable.id_card_24px),
-                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
-
+                        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                        readOnly = isEditing
                     )
                     Spacer(modifier = Modifier.height(8.dp))
                     CustomTextField(
@@ -186,7 +210,9 @@ fun GenericRegisterScreen(
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
-                        onClick = { navController.navigate(nextNavRoute) },
+                        onClick = {
+                            navController.navigate(nextNavRoute)
+                         },
                         modifier = Modifier.fillMaxWidth()
                     ) {
                         Text("Siguiente")
