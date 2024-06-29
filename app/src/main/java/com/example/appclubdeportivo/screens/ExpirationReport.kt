@@ -1,27 +1,35 @@
 package com.example.appclubdeportivo.screens
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.navigation.NavController
-import com.example.appclubdeportivo.view_entities.Activity
-import com.example.appclubdeportivo.view_entities.CustomerReport
+import com.example.appclubdeportivo.data.AppDatabase
+import com.example.appclubdeportivo.view_entities.CustomerCard
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat
 import java.util.*
 
 @Composable
-fun ExpirationReportScreen(navController: NavController) {
-    val customers = listOf(
-        CustomerReport("1", "Pepito", activities = listOf(Activity(1, "Natación")), expiredDate = "2023-12-31"),
-        CustomerReport("2", "Pepe", activities = listOf(Activity(1, "Funcional")), expiredDate = "2024-02-21" ),
-        CustomerReport("3", "Pepin", activities = listOf(Activity(1, "Natación")), expiredDate = "2024-08-12"),
-        CustomerReport("4", "John", activities = listOf(Activity(1, "Yoga")), expiredDate = "2023-11-15")
-    )
-
-    val dateFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
-    val currentDate = Date()
-    val expiredCustomers = customers.filter {
-        dateFormat.parse(it.expiredDate)?.before(currentDate) == true
+fun ExpirationReportScreen(navController: NavController, appDatabase: AppDatabase) {
+    val expiredCustomers = remember {
+        mutableStateOf(emptyList<CustomerCard>())
     }
-    val reportData = expiredCustomers.map {
+
+    LaunchedEffect(Unit) {
+        val customers = withContext(Dispatchers.IO) {
+            appDatabase.customerDao().getAllCustomers().filter {
+                it.expiredDate.let { date ->
+                    SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).parse(date)?.before(Date()) == true
+                }
+            }
+        }
+        expiredCustomers.value = customers
+    }
+
+    val reportData = expiredCustomers.value.map {
         listOf(it.id, it.name, it.expiredDate)
     }
     val headers = listOf("N°", "Nombre", "Fecha de Vencimiento")

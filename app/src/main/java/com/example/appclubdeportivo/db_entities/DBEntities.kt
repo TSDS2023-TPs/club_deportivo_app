@@ -130,7 +130,7 @@ data class Routine(
 data class PaymentMethod(
     @PrimaryKey(autoGenerate = true) val paymentMethodId: Int = 0,
     val description: String,
-    val hasPromotion: Boolean
+    val promotion: Double
 )
 
 @Entity
@@ -138,7 +138,7 @@ data class Fee(
     @PrimaryKey(autoGenerate = true) val feeId: Int = 0,
     val customerId: Int,
     val amount: Int,
-    val month: Int,
+    val monthYear: Int,
     val dueDate: String,
     val status: String
 )
@@ -146,11 +146,10 @@ data class Fee(
 @Entity
 data class Invoice(
     @PrimaryKey(autoGenerate = true) val invoiceId: Int = 0,
-    val customerId: Int,
     val amount: Float,
     val date: String,
     val feeId: Int,
-    val paymentMethodId: Int
+    val paymentMethod: String
 )
 @Entity
 data class CustomerActivity(

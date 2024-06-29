@@ -2,67 +2,104 @@ package com.example.appclubdeportivo.screens
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Card
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.appclubdeportivo.view_entities.Payment
+import java.text.SimpleDateFormat
+
+import java.util.Date
+import java.util.Locale
 
 @Composable
-fun PaymentCard(payment: Payment) {
-    val cardBackgroundColor = Color(0xFFE0F7FA).copy(alpha = 0.39f)
-
-    // Mantener el estado del RadioButton seleccionado
-    val selectedPaymentMethod = remember { mutableStateOf("Tarjeta") }
+fun PaymentCard(payment: Payment, isSelected: Boolean, onSelect: () -> Unit) {
+    val cardBackgroundColor = Color(0xFF76ABAE).copy(alpha = 0.4f)
+    var selectedPaymentMethod by remember { mutableStateOf("Efectivo") }
+    val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+    val paymentDate = formatter.format(Date())
 
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .background(cardBackgroundColor)
-    ) {
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .clickable(onClick = onSelect)
+        ,
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (isSelected)
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.7f)
+                else
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.3f)
+    )) {
         Column(
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
         ) {
-            Text(text = "N° Socio ${payment.customerId}", style = TextStyle(fontSize = 16.sp))
-            Text(text = "Cuota ${payment.monthYear}", style = TextStyle(fontSize = 16.sp))
-            Text(text = "Fecha Vencimiento ${payment.dueDate}", style = TextStyle(fontSize = 14.sp))
-            Text(text = "Fecha de pago ${payment.paymentDate}", style = TextStyle(fontSize = 14.sp))
-            Text(text = "Monto ${payment.amount}", style = TextStyle(fontSize = 14.sp))
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Text(
+                    text = "N° Socio ${payment.customerId}",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+                Text(
+                    text = "Cuota ${payment.monthYear}",
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp
+                )
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
 
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Row(modifier = Modifier.clickable {
-                    selectedPaymentMethod.value = "Tarjeta"
-                }) {
-                    RadioButton(
-                        selected = selectedPaymentMethod.value == "Tarjeta",
-                        onClick = { selectedPaymentMethod.value = "Tarjeta" }
-                    )
-                    Text(text = "Tarjeta", modifier = Modifier.align(Alignment.CenterVertically))
+                Column {
+                    Text("Fecha Vencimiento", fontSize = 14.sp, color = Color.Gray)
+                    Text(payment.dueDate, fontSize = 14.sp)
                 }
-                Row(modifier = Modifier.clickable {
-                    selectedPaymentMethod.value = "Efectivo"
-                }) {
+                Column(horizontalAlignment = Alignment.End) {
+                    Text("Fecha de pago", fontSize = 14.sp, color = Color.Gray)
+                    Text(paymentDate.toString(), fontSize = 14.sp)
+                }
+            }
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Text("Monto", fontSize = 14.sp, color = Color.Gray)
+            Text("$${payment.amount}", fontSize = 18.sp, fontWeight = FontWeight.Bold)
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
                     RadioButton(
-                        selected = selectedPaymentMethod.value == "Efectivo",
-                        onClick = { selectedPaymentMethod.value = "Efectivo" }
+                        selected = selectedPaymentMethod == "Tarjeta",
+                        onClick = { selectedPaymentMethod = "Tarjeta" },
                     )
-                    Text(text = "Efectivo", modifier = Modifier.align(Alignment.CenterVertically))
+                    Text("Tarjeta", fontSize = 14.sp)
+                }
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    RadioButton(
+                        selected = selectedPaymentMethod == "Efectivo",
+                        onClick = { selectedPaymentMethod = "Efectivo" },
+                    )
+                    Text("Efectivo", fontSize = 14.sp)
                 }
             }
         }

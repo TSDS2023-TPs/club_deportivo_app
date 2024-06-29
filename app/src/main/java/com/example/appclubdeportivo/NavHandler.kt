@@ -47,10 +47,10 @@ fun NavHandler(navController: NavHostController, appDatabase: AppDatabase) {
         }
         composable("employee_register_detail") { EmployeeRegisterDetailScreen(navController = navController) }
         composable("employee_unsubscribe") { EmployeeUnsubscribeScreen(navController = navController) }
-        composable("payment") { PaymentRegisterFeeScreen(navController = navController) }
+        composable("payment") { PaymentRegisterFeeScreen(navController = navController, appDatabase = appDatabase) }
         composable("payment_daily") { PaymentDailyScreen(navController = navController) }
         composable("reports") { ReportsScreen(navController = navController) }
-        composable("expiration_report") { ExpirationReportScreen(navController = navController) }
+        composable("expiration_report") { ExpirationReportScreen(navController = navController, appDatabase = appDatabase) }
         composable("employee_report") { EmployeeReportScreen(navController = navController) }
         composable("customer_report") { CustomerReportScreen(navController = navController) }
         composable("activity_report") { ActivityReportScreen(navController = navController) }

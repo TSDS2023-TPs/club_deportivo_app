@@ -3,6 +3,7 @@ package com.example.appclubdeportivo.data
 import androidx.room.*
 import com.example.appclubdeportivo.db_entities.*
 import com.example.appclubdeportivo.view_entities.CustomerCard
+import com.example.appclubdeportivo.view_entities.Payment
 
 @Dao
 interface RoleDao {
@@ -251,6 +252,14 @@ interface FeeDao {
     @Query("SELECT * FROM fee")
     fun getAllFees(): List<Fee>
 
+    @Query("select c.customerId, monthYear, dueDate, null, amount, feeId, '' as paymentMethod from (select * from Customer where accountStatusId = 1) c\n" +
+            "inner join (select * from Fee where status = \"Pendiente\") f on\n" +
+            "c.customerId = f.customerId\n" +
+            "where dueDate < datetime('Now', 'LocalTime', '+6 Month');")
+    fun getPendingPayments(): List<Payment>
+
+    @Query("update fee set status = 'Pagado' where feeId = :feeId")
+    fun updateFeeFromPayment(feeId: Int): Int
     @Insert
     fun insertFee(fee: Fee): Long
 

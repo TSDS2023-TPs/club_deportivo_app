@@ -21,12 +21,16 @@ import com.example.appclubdeportivo.R
 import com.example.appclubdeportivo.data.AppDatabase
 import com.example.appclubdeportivo.db_entities.Customer
 import com.example.appclubdeportivo.db_entities.Person
-import com.example.appclubdeportivo.screens.Header
+import android.content.Context
+import android.content.Intent
+import androidx.compose.ui.platform.LocalContext
+import androidx.core.content.FileProvider
 import com.example.appclubdeportivo.ui.theme.AppClubDeportivoTheme
 import com.example.appclubdeportivo.ui.theme.SelectableButton
 import com.example.appclubdeportivo.view_models.CustomerViewModel
 import com.example.appclubdeportivo.view_models.PersonViewModel
 import kotlinx.coroutines.delay
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -41,13 +45,15 @@ fun CustomerRegisterDetailScreen(
     var selectedButton by remember { mutableStateOf("Alta") }
     var physicalCheck by remember { mutableStateOf(false) }
     var showDialog by remember { mutableStateOf(false) }
+    var emitCard by remember { mutableStateOf(false) }
 
     val customerViewModel: CustomerViewModel = viewModel { CustomerViewModel(appDatabase) }
+    val context = LocalContext.current
 
     val gender by personViewModel.gender.collectAsState()
     val weight by personViewModel.weight.collectAsState()
     val height by personViewModel.height.collectAsState()
-
+AppClubDeportivoTheme {
     if (showDialog) {
         LaunchedEffect(Unit) {
             delay(2000) 
@@ -168,7 +174,14 @@ fun CustomerRegisterDetailScreen(
                             onClick = { selectedOption = "No Socio" }
                         )
                     }
-
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        Text("Emitir Comprobante")
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Checkbox(checked = emitCard, onCheckedChange = { emitCard = it })
+                    }
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Button(
@@ -208,6 +221,12 @@ fun CustomerRegisterDetailScreen(
 
                             customerViewModel.insertCustomer(person, customer)
 
+                            if (emitCard) {
+                                val pdfFile = customerViewModel.generateMembershipCard(context, customer, person)
+                                openPDF(context, pdfFile)
+                            }
+
+
                             personViewModel.clearFields()
                             navController.navigate("customer_list")
                             showDialog = true
@@ -231,4 +250,13 @@ fun CustomerRegisterDetailScreen(
             }
         }
     }
+}
+}
+
+fun openPDF(context: Context, file: File) {
+    val uri = FileProvider.getUriForFile(context, "${context.packageName}.fileProvider", file)
+    val intent = Intent(Intent.ACTION_VIEW)
+    intent.setDataAndType(uri, "application/pdf")
+    intent.flags = Intent.FLAG_ACTIVITY_NO_HISTORY or Intent.FLAG_GRANT_READ_URI_PERMISSION
+    context.startActivity(intent)
 }

@@ -219,9 +219,8 @@ fun insertInitialPaymentMethods(database: AppDatabase) {
     val paymentMethodDao = database.paymentMethodDao()
 
     val initialPaymentMethods = listOf(
-        PaymentMethod(description = "Tajeta de débito", hasPromotion = true),
-        PaymentMethod(description = "Efectivo", hasPromotion = true),
-        PaymentMethod(description = "Tarjeta de crédito", hasPromotion = false)
+        PaymentMethod(description = "Tajeta", promotion = 1.0),
+        PaymentMethod(description = "Efectivo", promotion = 0.8)
 
     )
 
@@ -234,8 +233,8 @@ fun insertInitialFees(database: AppDatabase) {
     val feeDao = database.feeDao()
 
     val initialFees = listOf(
-        Fee(customerId = 1, amount = 50, month = Calendar.JANUARY, dueDate = "2024-05-01", status = "Pendiente"),
-        Fee(customerId = 2, amount = 40, month = Calendar.FEBRUARY, dueDate = "2024-12-01", status = "Pago")
+        Fee(customerId = 1, amount = 50, monthYear = 202401, dueDate = "2024-02-01", status = "Pendiente"),
+        Fee(customerId = 2, amount = 40, monthYear = 202411, dueDate = "2024-12-01", status = "Pago")
     )
 
     initialFees.forEach { fee ->
@@ -247,8 +246,8 @@ fun insertInitialInvoices(database: AppDatabase) {
     val invoiceDao = database.invoiceDao()
 
     val initialInvoices = listOf(
-        Invoice(customerId = 1, amount = 50.0f, date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()), feeId = 1, paymentMethodId = 1),
-        Invoice(customerId = 2, amount = 40.0f, date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()), feeId = 2, paymentMethodId = 2)
+        Invoice(amount = 50.0f, date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()), feeId = 1, paymentMethod = "Tarjeta"),
+        Invoice(amount = 40.0f, date = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date()), feeId = 2, paymentMethod = "Efectivo")
     )
 
     initialInvoices.forEach { invoice ->
